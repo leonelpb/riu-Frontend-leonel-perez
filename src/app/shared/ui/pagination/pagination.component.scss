@@ -1,0 +1,55 @@
+@use '../../../../styles/tokens' as *;
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-xs;
+  flex-wrap: wrap;
+  padding: $space-md 0;
+
+  &__btn {
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    background: $color-bg-surface;
+    border: 1px solid transparent;
+    transition: all $transition-fast;
+    cursor: pointer;
+
+    &:hover:not(:disabled):not(&--active) {
+      background: $color-bg-tertiary;
+      color: $color-text-primary;
+      border-color: $color-secondary;
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    &--active {
+      background: $color-primary;
+      color: $color-text-primary;
+      border-color: $color-primary;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $color-primary;
+      outline-offset: 2px;
+    }
+  }
+
+  &__info {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    width: 100%;
+    text-align: center;
+  }
+}

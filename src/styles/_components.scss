@@ -1,0 +1,58 @@
+@use 'tokens' as *;
+
+// Global component styles
+
+// Empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-3xl $space-lg;
+  text-align: center;
+
+  &__icon {
+    font-size: 3rem;
+    margin-bottom: $space-md;
+    opacity: 0.5;
+  }
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $space-sm;
+  }
+
+  &__description {
+    color: $color-text-muted;
+    max-width: 400px;
+  }
+}
+
+// Error state
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-3xl $space-lg;
+  text-align: center;
+
+  &__icon {
+    font-size: 3rem;
+    margin-bottom: $space-md;
+    color: $color-danger;
+  }
+
+  &__title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    margin-bottom: $space-sm;
+    color: $color-danger;
+  }
+
+  &__description {
+    color: $color-text-muted;
+    max-width: 400px;
+  }
+}

@@ -1,0 +1,134 @@
+@use '../../../../styles/tokens' as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-sm;
+  font-family: $font-family-base;
+  font-weight: $font-weight-semibold;
+  border: 2px solid transparent;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: all $transition-fast;
+  white-space: nowrap;
+  user-select: none;
+  position: relative;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // --- Sizes ---
+  &--sm {
+    padding: $space-xs $space-sm;
+    font-size: $font-size-sm;
+    height: 32px;
+  }
+
+  &--md {
+    padding: $space-sm $space-md;
+    font-size: $font-size-base;
+    height: 40px;
+  }
+
+  &--lg {
+    padding: $space-md $space-lg;
+    font-size: $font-size-md;
+    height: 48px;
+  }
+
+  // --- Variants ---
+  &--primary {
+    background: $color-primary;
+    color: $color-text-primary;
+
+    &:hover:not(:disabled) {
+      background: $color-primary-light;
+      box-shadow: $shadow-glow-primary;
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      background: $color-primary-dark;
+      transform: translateY(0);
+    }
+  }
+
+  &--secondary {
+    background: $color-bg-surface;
+    color: $color-text-primary;
+    border-color: $color-secondary;
+
+    &:hover:not(:disabled) {
+      background: $color-secondary;
+      border-color: $color-secondary-light;
+    }
+  }
+
+  &--danger {
+    background: $color-danger;
+    color: $color-text-primary;
+
+    &:hover:not(:disabled) {
+      background: $color-accent-light;
+      box-shadow: $shadow-glow-accent;
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      background: $color-accent-dark;
+      transform: translateY(0);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: $color-text-secondary;
+
+    &:hover:not(:disabled) {
+      background: $color-bg-surface;
+      color: $color-text-primary;
+    }
+  }
+
+  &--accent {
+    background: $color-highlight;
+    color: $color-text-inverse;
+    font-weight: $font-weight-bold;
+
+    &:hover:not(:disabled) {
+      background: $color-highlight-light;
+      transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+      background: $color-highlight-dark;
+      transform: translateY(0);
+    }
+  }
+
+  // --- Loading ---
+  &--loading {
+    .btn__spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: currentColor;
+      border-radius: $radius-full;
+      animation: spin 0.6s linear infinite;
+    }
+  }
+
+  // --- Sub-elements ---
+  &__icon {
+    display: inline-flex;
+    font-size: 1.1em;
+  }
+
+  &__label {
+    display: inline-flex;
+  }
+}

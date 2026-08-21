@@ -1,0 +1,277 @@
+@use '../../../../../styles/tokens' as *;
+
+.hero-details {
+  display: flex;
+  flex-direction: column;
+  gap: $space-md;
+  background: $color-bg-secondary;
+  border-radius: $radius-xl;
+  border: 1px solid $color-bg-surface;
+  padding: $space-md;
+  padding-top: 5rem;
+  padding-bottom: 2rem;
+  height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  @media (min-width: $breakpoint-sm) {
+    padding: $space-lg;
+    overflow: hidden;
+  }
+
+  // VIEW IPHONE 14 PRO MAX
+  @media (width: 430px) and (height: 932px) {
+    padding-top: 11rem;
+    padding-bottom: 7rem;
+  }
+
+  // --- Top bar (close button) ---
+  &__top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  &__panel-title {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+  }
+
+  &__close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid $color-bg-surface;
+    border-radius: $radius-md;
+    background: $color-bg-tertiary;
+    color: $color-text-secondary;
+    font-size: $font-size-base;
+    cursor: pointer;
+    transition: all $transition-fast;
+    flex-shrink: 0;
+
+    &:hover {
+      background: $color-bg-surface;
+      color: $color-text-primary;
+      border-color: $color-secondary;
+    }
+  }
+
+  // --- Two-column layout ---
+  &__columns {
+    display: flex;
+    flex-direction: column;
+    gap: $space-md;
+    flex: 1;
+
+    @media (min-width: $breakpoint-sm) {
+      display: grid;
+      grid-template-columns: 45% 1fr;
+      grid-template-rows: 1fr auto auto;
+      gap: $space-lg;
+    }
+  }
+
+  // --- Left column: image ---
+  &__image-wrapper {
+    position: relative;
+    width: 60%;
+    max-height: 60%;
+    flex-shrink: 0;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    align-self: center;
+
+    @media (min-width: $breakpoint-sm) {
+      width: 100%;
+      max-height: 70%;
+      align-self: auto;
+      grid-row: 1 / -1;
+      grid-column: 1;
+    }
+  }
+
+  &__image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  &__image-glow {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center bottom, rgba($color-primary, 0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  // --- Right column: data ---
+  &__data {
+    display: flex;
+    flex-direction: column;
+    gap: $space-sm;
+
+    @media (min-width: $breakpoint-sm) {
+      overflow: hidden;
+      grid-row: 1;
+      grid-column: 2;
+    }
+  }
+
+  &__name {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    line-height: $line-height-tight;
+    flex-shrink: 0;
+    text-transform: uppercase;
+  }
+
+  &__description {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: $line-height-relaxed;
+    flex-shrink: 0;
+  }
+
+  // --- Meta ---
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+    flex-shrink: 0;
+  }
+
+  &__meta-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-sm;
+  }
+
+  &__meta-label {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__meta-value {
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    font-weight: $font-weight-medium;
+  }
+
+  // --- Stats ---
+  &__stats {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+
+    @media (min-width: $breakpoint-sm) {
+      grid-row: 2;
+      grid-column: 2;
+      overflow: hidden;
+    }
+  }
+
+  &__stats-title {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  &__stat {
+    display: grid;
+    grid-template-columns: 90px 1fr 30px;
+    align-items: center;
+    gap: $space-sm;
+    flex-shrink: 0;
+  }
+
+  &__stat-label {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    text-transform: capitalize;
+  }
+
+  &__stat-bar {
+    height: 6px;
+    background: $color-bg-surface;
+    border-radius: $radius-full;
+    overflow: hidden;
+  }
+
+  &__stat-fill {
+    height: 100%;
+    background: linear-gradient(90deg, $color-primary, $color-accent);
+    border-radius: $radius-full;
+    transition: width $transition-slow;
+  }
+
+  &__stat-value {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+    text-align: right;
+  }
+
+  // --- Actions ---
+  &__actions {
+    display: flex;
+    gap: $space-sm;
+    padding-top: $space-sm;
+    border-top: 1px solid $color-bg-surface;
+    flex-shrink: 0;
+
+    @media (min-width: $breakpoint-sm) {
+      grid-row: 3;
+      grid-column: 2;
+    }
+  }
+
+  &__action {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-xs;
+    padding: $space-sm $space-md;
+    border-radius: $radius-md;
+    font-family: $font-family-base;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    transition: all $transition-fast;
+    border: 1px solid transparent;
+    white-space: nowrap;
+
+    &--edit {
+      background: $color-bg-surface;
+      color: $color-text-primary;
+      border-color: $color-primary;
+
+      &:hover {
+        background: $color-primary;
+        border-color: $color-primary-light;
+      }
+    }
+
+    &--delete {
+      background: $color-danger;
+      color: $color-text-primary;
+
+      &:hover {
+        background: $color-accent-light;
+        box-shadow: $shadow-glow-accent;
+      }
+    }
+  }
+}

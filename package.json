@@ -1,0 +1,50 @@
+{
+  "name": "crud-challenge",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "node scripts/set-env.js && ng serve",
+    "prebuild": "node scripts/set-env.js",
+    "build": "ng build",
+    "build:dev": "node scripts/set-env.js && ng build --configuration=development",
+    "build:staging": "node scripts/set-env.js && ng build --configuration=staging",
+    "build:prod": "node scripts/set-env.js && ng build --configuration=production",
+    "watch": "node scripts/set-env.js && ng build --watch --configuration=development",
+    "test": "ng test",
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
+    "format": "prettier --write \"src/**/*.{ts,scss,html,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,scss,html,json}\""
+  },
+  "private": true,
+  "dependencies": {
+    "@angular/common": "^22.1.3",
+    "@angular/compiler": "^22.1.3",
+    "@angular/core": "^22.1.3",
+    "@angular/forms": "^22.1.3",
+    "@angular/platform-browser": "^22.1.3",
+    "@angular/platform-browser-dynamic": "^22.1.3",
+    "@angular/router": "^22.1.3",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "^0.16.2"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^22.1.5",
+    "@angular/cli": "^22.1.5",
+    "@angular/compiler-cli": "^22.1.3",
+    "@types/jasmine": "~5.1.0",
+    "angular-eslint": "^22.1.0",
+    "eslint": "^9.28.0",
+    "istanbul-lib-instrument": "^6.0.3",
+    "jasmine-core": "~5.6.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "prettier": "^3.9.6",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.67.0"
+  }
+}

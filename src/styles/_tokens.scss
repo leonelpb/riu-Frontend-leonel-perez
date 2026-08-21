@@ -1,0 +1,125 @@
+// ============================================================
+// DESIGN TOKENS — Marvel vs. Capcom inspired palette
+// ============================================================
+
+// --- COLORS ---
+// Primary: Electric Indigo (dominant action color)
+$color-primary: #611bee;
+$color-primary-light: #7e45f3;
+$color-primary-dark: #4a10c5;
+
+// Secondary: Slate Grey (supporting UI)
+$color-secondary: #61797f;
+$color-secondary-light: #8a9da3;
+$color-secondary-dark: #4a5d63;
+
+// Accent: Pure Red (danger, emphasis, CTA energy)
+$color-accent: #f90608;
+$color-accent-light: #ff3b3d;
+$color-accent-dark: #c00506;
+
+// Highlight: Golden Glow (rewards, stars, selection glow)
+$color-highlight: #f5de08;
+$color-highlight-light: #ffe94d;
+$color-highlight-dark: #c5b206;
+
+// Neutrals
+$color-dust: #d2d6d5;
+$color-dust-light: #e8eaea;
+$color-dust-dark: #a3a9a8;
+
+// Backgrounds
+$color-bg-primary: #0d0d12; // Deep dark base
+$color-bg-secondary: #14141f; // Elevated surface
+$color-bg-tertiary: #1c1c2a; // Cards, panels
+$color-bg-surface: #222236; // Interactive surfaces
+
+// Text
+$color-text-primary: #f0f0f5;
+$color-text-secondary: #a0a3b1;
+$color-text-muted: #6b6e7d;
+$color-text-inverse: #0d0d12;
+
+// Semantic
+$color-success: #2ecc71;
+$color-danger: #f90608;
+$color-warning: #f5de08;
+$color-info: #611bee;
+
+// --- TYPOGRAPHY ---
+$font-family-base:
+  'Aldrich',
+  'Segoe UI',
+  system-ui,
+  -apple-system,
+  sans-serif;
+$font-family-display:
+  'Aldrich',
+  'Segoe UI',
+  system-ui,
+  -apple-system,
+  sans-serif;
+
+$font-size-xs: 0.75rem; // 12px
+$font-size-sm: 0.875rem; // 14px
+$font-size-base: 1rem; // 16px
+$font-size-md: 1.125rem; // 18px
+$font-size-lg: 1.25rem; // 20px
+$font-size-xl: 1.5rem; // 24px
+$font-size-2xl: 2rem; // 32px
+$font-size-3xl: 2.5rem; // 40px
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+$line-height-tight: 1.2;
+$line-height-base: 1.5;
+$line-height-relaxed: 1.75;
+
+// --- SPACING SCALE ---
+$space-xs: 0.25rem; // 4px
+$space-sm: 0.5rem; // 8px
+$space-md: 1rem; // 16px
+$space-lg: 1.5rem; // 24px
+$space-xl: 2rem; // 32px
+$space-2xl: 3rem; // 48px
+$space-3xl: 4rem; // 64px
+
+// --- BORDER RADIUS ---
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+$radius-full: 9999px;
+
+// --- SHADOWS ---
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+$shadow-glow-primary: 0 0 20px rgba(97, 27, 238, 0.3);
+$shadow-glow-accent: 0 0 20px rgba(249, 6, 8, 0.3);
+
+// --- TRANSITIONS ---
+$transition-fast: 150ms ease;
+$transition-base: 250ms ease;
+$transition-slow: 400ms ease;
+
+// --- Z-INDEX SCALE ---
+$z-dropdown: 100;
+$z-sticky: 200;
+$z-modal-backdrop: 300;
+$z-modal: 400;
+$z-toast: 500;
+
+// --- LAYOUT ---
+$sidebar-width: 260px;
+$sidebar-collapsed-width: 72px;
+$header-height: 0px; // no header, sidebar only
+
+// --- BREAKPOINTS ---
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;

@@ -1,0 +1,411 @@
+@use '../../../../../styles/tokens' as *;
+
+:host {
+  display: contents;
+}
+
+.hero-card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  flex: 1;
+  min-width: 0;
+  background: $color-bg-tertiary;
+  border-radius: $radius-lg;
+  border: 2px solid transparent;
+  overflow: hidden;
+  cursor: pointer;
+  outline: none;
+
+  // =============================================
+  //  ALL CARDS — electric border by default
+  //  Pulsing glow on every card in the grid
+  // =============================================
+  animation: electricPulse 0.15s steps(2) infinite;
+
+  // =============================================
+  //  HOVER + FOCUSED — same electric double-line
+  //  ::before = 2nd cyan line that wobbles
+  //  ::after  = spark flash
+  // =============================================
+  &:hover:not(.hero-card--selected):not(.hero-card--dimmed),
+  &--focused {
+    border: 4px solid $color-highlight;
+    box-shadow: none;
+    animation: none;
+
+    .hero-card__image {
+      transform: scale(1.05);
+    }
+
+    // 2nd line — cyan border that wobbles and deforms
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border: 2px solid rgba(0, 210, 255, 0.9);
+      border-radius: calc(#{$radius-lg} - 2px);
+      pointer-events: none;
+      z-index: 3;
+      animation: electricDeform 0.4s steps(4) infinite;
+    }
+
+    // Spark flash — bright dots that flicker on the border
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: $radius-lg;
+      pointer-events: none;
+      z-index: 3;
+      background:
+        radial-gradient(circle 3px at 10% 50%, rgba(255, 255, 255, 0.95) 0%, transparent 100%),
+        radial-gradient(circle 2px at 90% 30%, rgba(0, 210, 255, 0.9) 0%, transparent 100%),
+        radial-gradient(circle 2.5px at 50% 90%, rgba(255, 255, 255, 0.8) 0%, transparent 100%);
+      animation: sparkFlicker 0.2s steps(3) infinite;
+    }
+  }
+
+  // =============================================
+  //  SELECTED / ACTIVATED STATE
+  //  Inherits electric pulse + adds spark overlay
+  // =============================================
+  &--selected {
+    border-color: $color-highlight;
+    animation: electricPulse 0.15s steps(2) infinite;
+
+    .hero-card__image {
+      transform: scale(1.05);
+    }
+
+    // Electric sparks — bright dots that appear/disappear rapidly
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $radius-lg;
+      z-index: 2;
+      pointer-events: none;
+      background:
+        radial-gradient(circle 2px at 15% 20%, rgba(255, 255, 255, 0.9) 0%, transparent 100%),
+        radial-gradient(circle 1.5px at 85% 35%, rgba(0, 210, 255, 0.8) 0%, transparent 100%),
+        radial-gradient(circle 2px at 45% 80%, rgba(255, 255, 255, 0.7) 0%, transparent 100%),
+        radial-gradient(circle 1px at 70% 10%, rgba(0, 210, 255, 0.9) 0%, transparent 100%),
+        radial-gradient(circle 1.5px at 25% 65%, rgba(255, 255, 255, 0.8) 0%, transparent 100%),
+        radial-gradient(circle 2px at 90% 75%, rgba(0, 210, 255, 0.7) 0%, transparent 100%);
+      animation: sparkFlicker 0.3s steps(3) infinite;
+    }
+  }
+
+  // Dimmed — suppress electric animation
+  &--dimmed {
+    opacity: 0.5;
+    filter: saturate(0.6);
+    animation: none;
+
+    &:hover {
+      opacity: 0.8;
+      filter: saturate(0.8);
+    }
+  }
+
+  // --- Image ---
+  &__image-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: $radius-lg;
+    background: $color-bg-secondary;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform $transition-slow;
+    will-change: transform;
+  }
+
+  &__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    background: $color-bg-surface;
+  }
+
+  // =============================================
+  // Overlay — position:fixed escapes overflow
+  // and stacking contexts from ancestors
+  // =============================================
+  &__overlay {
+    position: fixed;
+    width: 280px;
+    background: $color-bg-secondary;
+    border: 1px solid $color-bg-surface;
+    border-radius: $radius-xl;
+    padding: $space-md;
+    z-index: 9999;
+    box-shadow: $shadow-lg;
+    animation: cardOverlayFadeIn $transition-fast ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: $space-md;
+    pointer-events: auto;
+
+    // Top variant — positioned above the card
+    &--top {
+      top: auto;
+      bottom: auto;
+    }
+  }
+
+  // --- Overlay Header ---
+  &__overlay-header {
+    display: flex;
+    gap: $space-md;
+    align-items: flex-start;
+  }
+
+  &__overlay-image {
+    width: 64px;
+    height: 64px;
+    border-radius: $radius-lg;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: $color-bg-surface;
+  }
+
+  &__overlay-info {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+    min-width: 0;
+  }
+
+  &__overlay-name {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    line-height: $line-height-tight;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  &__overlay-publisher {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  // --- Overlay Stats ---
+  &__overlay-stats {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+  }
+
+  &__overlay-stat {
+    display: grid;
+    grid-template-columns: 70px 1fr 24px;
+    align-items: center;
+    gap: $space-xs;
+  }
+
+  &__overlay-stat-label {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    text-transform: capitalize;
+  }
+
+  &__overlay-stat-bar {
+    height: 4px;
+    background: $color-bg-surface;
+    border-radius: $radius-full;
+    overflow: hidden;
+  }
+
+  &__overlay-stat-fill {
+    height: 100%;
+    background: linear-gradient(90deg, $color-primary, $color-accent);
+    border-radius: $radius-full;
+  }
+
+  &__overlay-stat-value {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    font-weight: $font-weight-medium;
+    text-align: right;
+  }
+
+  // --- Overlay Actions ---
+  &__overlay-actions {
+    display: flex;
+    gap: $space-xs;
+    padding-top: $space-sm;
+    border-top: 1px solid $color-bg-surface;
+  }
+
+  &__overlay-action {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-xs;
+    padding: $space-xs $space-sm;
+    border-radius: $radius-md;
+    font-family: $font-family-base;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-xs;
+    cursor: pointer;
+    transition: all $transition-fast;
+    border: 1px solid transparent;
+    white-space: nowrap;
+
+    &--view {
+      background: $color-bg-surface;
+      color: $color-text-primary;
+      border-color: $color-secondary;
+
+      &:hover {
+        background: $color-secondary;
+        border-color: $color-secondary-light;
+      }
+    }
+
+    &--edit {
+      background: $color-bg-surface;
+      color: $color-text-primary;
+      border-color: $color-primary;
+
+      &:hover {
+        background: $color-primary;
+        border-color: $color-primary-light;
+      }
+    }
+
+    &--delete {
+      background: $color-danger;
+      color: $color-text-primary;
+
+      &:hover {
+        background: $color-accent-light;
+        box-shadow: $shadow-glow-accent;
+      }
+    }
+  }
+}
+
+// =============================================
+// KEYFRAMES — inline in component SCSS
+// (Angular 22 esbuild drops CSS from @use modules)
+// =============================================
+
+// Electric border — subtle glow pulse (default cards)
+@keyframes electricPulse {
+  0% {
+    box-shadow:
+      0 0 4px rgba($color-highlight, 0.3),
+      0 0 8px rgba($color-highlight, 0.15);
+  }
+  25% {
+    box-shadow:
+      0 0 6px rgba(0, 210, 255, 0.35),
+      0 0 12px rgba(0, 210, 255, 0.12);
+  }
+  50% {
+    box-shadow:
+      0 0 3px rgba($color-highlight, 0.25),
+      0 0 7px rgba($color-highlight, 0.1);
+  }
+  75% {
+    box-shadow:
+      0 0 7px rgba(0, 210, 255, 0.4),
+      0 0 14px rgba(0, 210, 255, 0.15);
+  }
+  100% {
+    box-shadow:
+      0 0 4px rgba($color-highlight, 0.3),
+      0 0 8px rgba($color-highlight, 0.15);
+  }
+}
+
+// Electric border — brighter pulse for hover
+@keyframes electricPulseFast {
+  0% {
+    box-shadow:
+      0 0 6px rgba($color-highlight, 0.5),
+      0 0 14px rgba($color-highlight, 0.25);
+  }
+  25% {
+    box-shadow:
+      0 0 10px rgba(0, 210, 255, 0.6),
+      0 0 20px rgba(0, 210, 255, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 5px rgba($color-highlight, 0.45),
+      0 0 12px rgba($color-highlight, 0.2);
+  }
+  75% {
+    box-shadow:
+      0 0 12px rgba(0, 210, 255, 0.7),
+      0 0 24px rgba(0, 210, 255, 0.3);
+  }
+  100% {
+    box-shadow:
+      0 0 6px rgba($color-highlight, 0.5),
+      0 0 14px rgba($color-highlight, 0.25);
+  }
+}
+
+// Spark dots — rapid appear/disappear
+@keyframes sparkFlicker {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  33% {
+    opacity: 0.3;
+    transform: scale(0.6);
+  }
+  66% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+// Focused border — 2nd line wobble/deformation
+@keyframes electricDeform {
+  0% {
+    transform: translate(0, 0) scale(1);
+    border-color: rgba(0, 210, 255, 0.9);
+  }
+  25% {
+    transform: translate(1px, -1px) scale(1.003);
+    border-color: rgba(255, 255, 255, 0.9);
+  }
+  50% {
+    transform: translate(-1px, 1px) scale(0.997);
+    border-color: rgba(0, 210, 255, 0.7);
+  }
+  75% {
+    transform: translate(1px, 0) scale(1.002);
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+    border-color: rgba(0, 210, 255, 0.9);
+  }
+}

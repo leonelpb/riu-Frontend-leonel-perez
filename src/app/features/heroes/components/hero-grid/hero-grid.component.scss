@@ -1,0 +1,94 @@
+@use '../../../../../styles/tokens' as *;
+
+.hero-grid {
+  display: flex;
+  flex-direction: column;
+  gap: $space-sm;
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  outline: none;
+
+  // Mobile: grid takes natural height so page scrolls
+  @media (max-width: ($breakpoint-sm - 1)) {
+    flex: none;
+  }
+
+  @media (min-width: $breakpoint-md) {
+    gap: $space-md;
+  }
+
+  // --- Uniform grid (panel/split mode or mobile) ---
+  &__uniform {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $space-sm;
+    flex: 1;
+    min-height: 0;
+    align-content: start;
+
+    @media (min-width: $breakpoint-sm) {
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    @media (min-width: $breakpoint-md) {
+      gap: $space-md;
+    }
+
+    // Mobile: natural height
+    @media (max-width: ($breakpoint-sm - 1)) {
+      flex: none;
+    }
+  }
+
+  // --- Pyramid rows ---
+  &__rows-container {
+    display: flex;
+    flex-direction: column;
+    gap: $space-sm;
+    flex: 1;
+    min-height: 0;
+
+    @media (min-width: $breakpoint-md) {
+      gap: $space-md;
+    }
+
+    // Mobile: natural height
+    @media (max-width: ($breakpoint-sm - 1)) {
+      flex: none;
+    }
+  }
+
+  &__row {
+    display: flex;
+    justify-content: center;
+    gap: $space-sm;
+    width: 100%;
+    margin: 0 auto;
+
+    @media (min-width: $breakpoint-md) {
+      gap: $space-md;
+    }
+
+    // Row 1 (8 cards): full width
+    &:nth-child(3n + 1) {
+      width: 100%;
+    }
+
+    // Row 2 (6 cards): 75% width, centered
+    &:nth-child(3n + 2) {
+      width: 75%;
+    }
+
+    // Row 3 (4 cards): 50% width, centered
+    &:nth-child(3n + 3) {
+      width: 50%;
+    }
+
+    // Single hero: cap card size so it doesn't dominate
+    &--single {
+      width: 300px !important;
+    }
+  }
+}

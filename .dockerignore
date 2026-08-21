@@ -1,0 +1,17 @@
+node_modules
+dist
+.git
+.gitignore
+coverage
+.angular
+.vscode
+.idea
+*.md
+!README.md
+.env
+.env.*
+docker-compose*.yml
+compose*.yml
+Dockerfile
+.dockerignore
+.editorconfig

@@ -1,0 +1,38 @@
+@use '../../../../styles/tokens' as *;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-xs;
+  padding: $space-xs $space-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-full;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &--primary {
+    background: rgba($color-primary, 0.2);
+    color: $color-primary-light;
+  }
+
+  &--success {
+    background: rgba($color-success, 0.2);
+    color: $color-success;
+  }
+
+  &--danger {
+    background: rgba($color-danger, 0.2);
+    color: $color-accent-light;
+  }
+
+  &--warning {
+    background: rgba($color-warning, 0.2);
+    color: $color-highlight;
+  }
+
+  &--neutral {
+    background: $color-bg-surface;
+    color: $color-text-secondary;
+  }
+}

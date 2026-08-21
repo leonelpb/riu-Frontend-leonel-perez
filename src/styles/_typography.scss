@@ -1,0 +1,52 @@
+@use 'tokens' as *;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: $color-text-primary;
+}
+
+h1 {
+  font-size: $font-size-3xl;
+}
+h2 {
+  font-size: $font-size-2xl;
+}
+h3 {
+  font-size: $font-size-xl;
+}
+h4 {
+  font-size: $font-size-lg;
+}
+h5 {
+  font-size: $font-size-md;
+}
+h6 {
+  font-size: $font-size-base;
+}
+
+p {
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+}
+
+.text-muted {
+  color: $color-text-muted;
+}
+
+.text-accent {
+  color: $color-accent;
+}
+
+.text-primary {
+  color: $color-primary;
+}
+
+.text-highlight {
+  color: $color-highlight;
+}

@@ -1,0 +1,59 @@
+@use '../../../../styles/tokens' as *;
+
+.layout {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &__content {
+    flex: 1;
+    width: 100%;
+    padding: $space-lg;
+    min-height: 0;
+    position: relative;
+    z-index: 1;
+    padding-top: $space-3xl;
+
+    @media (min-width: $breakpoint-md + 1) {
+      padding: $space-xl $space-2xl;
+    }
+  }
+}
+
+// CRT frame overlay — mobile first, excluded tablet
+.y2k-frame {
+  position: fixed;
+  inset: 0;
+  background-image: url('/tama.png');
+  background-position: center;
+  background-size: 250%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 9998;
+
+  // Tablet: hide (undecided)
+  @media (min-width: 576px) and (max-width: 999px) {
+    display: none;
+  }
+
+  // Desktop: switch to crt.pngs
+  @media (min-width: 1025px) and (max-width: 2000px) {
+    background-image: url('/crt.png');
+    background-size: 140%;
+  }
+
+  // >1030px: zoom 130%
+  @media (min-width: 1030px) and (max-width: 2000px) {
+    background-size: 138%;
+  }
+
+  // >1230px: zoom 120%
+  @media (min-width: 1230px) and (max-width: 2000px) {
+    background-size: 135%;
+  }
+
+  // >2000px: hide
+  @media (min-width: 2001px) {
+    display: none;
+  }
+}

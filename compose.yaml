@@ -1,0 +1,36 @@
+services:
+  app-dev:
+    build:
+      context: .
+      args:
+        BUILD_CONFIGURATION: development
+        API_KEY: ${SUPERHERO_API_KEY}
+    ports:
+      - "4200:80"
+    container_name: hero-app-dev
+    environment:
+      - NODE_ENV=development
+
+  app-staging:
+    build:
+      context: .
+      args:
+        BUILD_CONFIGURATION: staging
+        API_KEY: ${SUPERHERO_API_KEY}
+    ports:
+      - "4201:80"
+    container_name: hero-app-staging
+    environment:
+      - NODE_ENV=production
+
+  app-prod:
+    build:
+      context: .
+      args:
+        BUILD_CONFIGURATION: production
+        API_KEY: ${SUPERHERO_API_KEY}
+    ports:
+      - "4202:80"
+    container_name: hero-app-prod
+    environment:
+      - NODE_ENV=production

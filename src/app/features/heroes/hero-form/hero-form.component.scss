@@ -1,0 +1,151 @@
+@use '../../../../styles/tokens' as *;
+
+.hero-form {
+  display: flex;
+  flex-direction: column;
+  gap: $space-lg;
+  max-width: 560px;
+  width: 100%;
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xs;
+  }
+
+  &__label {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+  }
+
+  &__input {
+    padding: $space-sm $space-md;
+    background: $color-bg-surface;
+    border: 2px solid $color-secondary-dark;
+    border-radius: $radius-md;
+    color: $color-text-primary;
+    font-size: $font-size-base;
+    transition:
+      border-color $transition-fast,
+      box-shadow $transition-fast;
+    width: 100%;
+
+    &::placeholder {
+      color: $color-text-muted;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+      box-shadow: $shadow-glow-primary;
+    }
+
+    &--error {
+      border-color: $color-danger;
+
+      &:focus {
+        box-shadow: 0 0 12px rgba($color-danger, 0.3);
+      }
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: $font-family-base;
+  }
+
+  &__select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23A0A3B1' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right $space-md center;
+    padding-right: $space-xl;
+    cursor: pointer;
+
+    option {
+      background: $color-bg-secondary;
+      color: $color-text-primary;
+    }
+  }
+
+  &__error {
+    font-size: $font-size-xs;
+    color: $color-danger;
+    padding-left: $space-xs;
+  }
+
+  &__char-count {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    text-align: right;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-sm;
+    margin-top: $space-md;
+    padding-top: $space-md;
+    border-top: 1px solid $color-bg-surface;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: $space-sm;
+    font-family: $font-family-base;
+    font-weight: $font-weight-semibold;
+    border: 2px solid transparent;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-fast;
+    white-space: nowrap;
+    user-select: none;
+    padding: $space-sm $space-md;
+    font-size: $font-size-base;
+    height: 40px;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &--primary {
+      background: $color-primary;
+      color: $color-text-primary;
+
+      &:hover:not(:disabled) {
+        background: $color-primary-light;
+        box-shadow: $shadow-glow-primary;
+        transform: translateY(-1px);
+      }
+
+      &:active:not(:disabled) {
+        background: $color-primary-dark;
+        transform: translateY(0);
+      }
+    }
+
+    &--ghost {
+      background: transparent;
+      color: $color-text-secondary;
+
+      &:hover:not(:disabled) {
+        background: $color-bg-surface;
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  &__spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: currentColor;
+    border-radius: $radius-full;
+    animation: spin 0.6s linear infinite;
+  }
+}
