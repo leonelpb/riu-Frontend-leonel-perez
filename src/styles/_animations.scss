@@ -1,0 +1,109 @@
+@use 'tokens' as *;
+
+// =============================================
+// HERO CARD — electric border animations
+// Extracted from hero-card.component.scss to
+// keep component under the 4kB style budget.
+// =============================================
+
+// Electric border — subtle glow pulse (default cards)
+@keyframes electricPulse {
+  0% {
+    box-shadow:
+      0 0 4px rgba($color-highlight, 0.3),
+      0 0 8px rgba($color-highlight, 0.15);
+  }
+  25% {
+    box-shadow:
+      0 0 6px rgba(0, 210, 255, 0.35),
+      0 0 12px rgba(0, 210, 255, 0.12);
+  }
+  50% {
+    box-shadow:
+      0 0 3px rgba($color-highlight, 0.25),
+      0 0 7px rgba($color-highlight, 0.1);
+  }
+  75% {
+    box-shadow:
+      0 0 7px rgba(0, 210, 255, 0.4),
+      0 0 14px rgba(0, 210, 255, 0.15);
+  }
+  100% {
+    box-shadow:
+      0 0 4px rgba($color-highlight, 0.3),
+      0 0 8px rgba($color-highlight, 0.15);
+  }
+}
+
+// Electric border — brighter pulse for hover
+@keyframes electricPulseFast {
+  0% {
+    box-shadow:
+      0 0 6px rgba($color-highlight, 0.5),
+      0 0 14px rgba($color-highlight, 0.25);
+  }
+  25% {
+    box-shadow:
+      0 0 10px rgba(0, 210, 255, 0.6),
+      0 0 20px rgba(0, 210, 255, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 0 5px rgba($color-highlight, 0.45),
+      0 0 12px rgba($color-highlight, 0.2);
+  }
+  75% {
+    box-shadow:
+      0 0 12px rgba(0, 210, 255, 0.7),
+      0 0 24px rgba(0, 210, 255, 0.3);
+  }
+  100% {
+    box-shadow:
+      0 0 6px rgba($color-highlight, 0.5),
+      0 0 14px rgba($color-highlight, 0.25);
+  }
+}
+
+// Spark dots — rapid appear/disappear
+@keyframes sparkFlicker {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  33% {
+    opacity: 0.3;
+    transform: scale(0.6);
+  }
+  66% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+// Focused border — 2nd line wobble/deformation
+@keyframes electricDeform {
+  0% {
+    transform: translate(0, 0) scale(1);
+    border-color: rgba(0, 210, 255, 0.9);
+  }
+  25% {
+    transform: translate(1px, -1px) scale(1.003);
+    border-color: rgba(255, 255, 255, 0.9);
+  }
+  50% {
+    transform: translate(-1px, 1px) scale(0.997);
+    border-color: rgba(0, 210, 255, 0.7);
+  }
+  75% {
+    transform: translate(1px, 0) scale(1.002);
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+    border-color: rgba(0, 210, 255, 0.9);
+  }
+}

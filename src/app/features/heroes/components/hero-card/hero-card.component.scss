@@ -15,18 +15,8 @@
   overflow: hidden;
   cursor: pointer;
   outline: none;
-
-  // =============================================
-  //  ALL CARDS — electric border by default
-  //  Pulsing glow on every card in the grid
-  // =============================================
   animation: electricPulse 0.15s steps(2) infinite;
 
-  // =============================================
-  //  HOVER + FOCUSED — same electric double-line
-  //  ::before = 2nd cyan line that wobbles
-  //  ::after  = spark flash
-  // =============================================
   &:hover:not(.hero-card--selected):not(.hero-card--dimmed),
   &--focused {
     border: 4px solid $color-highlight;
@@ -37,7 +27,6 @@
       transform: scale(1.05);
     }
 
-    // 2nd line — cyan border that wobbles and deforms
     &::before {
       content: '';
       position: absolute;
@@ -49,7 +38,6 @@
       animation: electricDeform 0.4s steps(4) infinite;
     }
 
-    // Spark flash — bright dots that flicker on the border
     &::after {
       content: '';
       position: absolute;
@@ -65,10 +53,6 @@
     }
   }
 
-  // =============================================
-  //  SELECTED / ACTIVATED STATE
-  //  Inherits electric pulse + adds spark overlay
-  // =============================================
   &--selected {
     border-color: $color-highlight;
     animation: electricPulse 0.15s steps(2) infinite;
@@ -77,7 +61,6 @@
       transform: scale(1.05);
     }
 
-    // Electric sparks — bright dots that appear/disappear rapidly
     &::after {
       content: '';
       position: absolute;
@@ -96,19 +79,16 @@
     }
   }
 
-  // Dimmed — suppress electric animation
   &--dimmed {
     opacity: 0.5;
     filter: saturate(0.6);
     animation: none;
-
     &:hover {
       opacity: 0.8;
       filter: saturate(0.8);
     }
   }
 
-  // --- Image ---
   &__image-container {
     width: 100%;
     height: 100%;
@@ -137,10 +117,6 @@
     background: $color-bg-surface;
   }
 
-  // =============================================
-  // Overlay — position:fixed escapes overflow
-  // and stacking contexts from ancestors
-  // =============================================
   &__overlay {
     position: fixed;
     width: 280px;
@@ -155,15 +131,12 @@
     flex-direction: column;
     gap: $space-md;
     pointer-events: auto;
-
-    // Top variant — positioned above the card
     &--top {
       top: auto;
       bottom: auto;
     }
   }
 
-  // --- Overlay Header ---
   &__overlay-header {
     display: flex;
     gap: $space-md;
@@ -205,7 +178,6 @@
     letter-spacing: 0.05em;
   }
 
-  // --- Overlay Stats ---
   &__overlay-stats {
     display: flex;
     flex-direction: column;
@@ -245,7 +217,6 @@
     text-align: right;
   }
 
-  // --- Overlay Actions ---
   &__overlay-actions {
     display: flex;
     gap: $space-xs;
@@ -273,7 +244,6 @@
       background: $color-bg-surface;
       color: $color-text-primary;
       border-color: $color-secondary;
-
       &:hover {
         background: $color-secondary;
         border-color: $color-secondary-light;
@@ -284,7 +254,6 @@
       background: $color-bg-surface;
       color: $color-text-primary;
       border-color: $color-primary;
-
       &:hover {
         background: $color-primary;
         border-color: $color-primary-light;
@@ -294,118 +263,10 @@
     &--delete {
       background: $color-danger;
       color: $color-text-primary;
-
       &:hover {
         background: $color-accent-light;
         box-shadow: $shadow-glow-accent;
       }
     }
-  }
-}
-
-// =============================================
-// KEYFRAMES — inline in component SCSS
-// (Angular 22 esbuild drops CSS from @use modules)
-// =============================================
-
-// Electric border — subtle glow pulse (default cards)
-@keyframes electricPulse {
-  0% {
-    box-shadow:
-      0 0 4px rgba($color-highlight, 0.3),
-      0 0 8px rgba($color-highlight, 0.15);
-  }
-  25% {
-    box-shadow:
-      0 0 6px rgba(0, 210, 255, 0.35),
-      0 0 12px rgba(0, 210, 255, 0.12);
-  }
-  50% {
-    box-shadow:
-      0 0 3px rgba($color-highlight, 0.25),
-      0 0 7px rgba($color-highlight, 0.1);
-  }
-  75% {
-    box-shadow:
-      0 0 7px rgba(0, 210, 255, 0.4),
-      0 0 14px rgba(0, 210, 255, 0.15);
-  }
-  100% {
-    box-shadow:
-      0 0 4px rgba($color-highlight, 0.3),
-      0 0 8px rgba($color-highlight, 0.15);
-  }
-}
-
-// Electric border — brighter pulse for hover
-@keyframes electricPulseFast {
-  0% {
-    box-shadow:
-      0 0 6px rgba($color-highlight, 0.5),
-      0 0 14px rgba($color-highlight, 0.25);
-  }
-  25% {
-    box-shadow:
-      0 0 10px rgba(0, 210, 255, 0.6),
-      0 0 20px rgba(0, 210, 255, 0.25);
-  }
-  50% {
-    box-shadow:
-      0 0 5px rgba($color-highlight, 0.45),
-      0 0 12px rgba($color-highlight, 0.2);
-  }
-  75% {
-    box-shadow:
-      0 0 12px rgba(0, 210, 255, 0.7),
-      0 0 24px rgba(0, 210, 255, 0.3);
-  }
-  100% {
-    box-shadow:
-      0 0 6px rgba($color-highlight, 0.5),
-      0 0 14px rgba($color-highlight, 0.25);
-  }
-}
-
-// Spark dots — rapid appear/disappear
-@keyframes sparkFlicker {
-  0% {
-    opacity: 0.9;
-    transform: scale(1);
-  }
-  33% {
-    opacity: 0.3;
-    transform: scale(0.6);
-  }
-  66% {
-    opacity: 0.8;
-    transform: scale(1.1);
-  }
-  100% {
-    opacity: 0.5;
-    transform: scale(0.8);
-  }
-}
-
-// Focused border — 2nd line wobble/deformation
-@keyframes electricDeform {
-  0% {
-    transform: translate(0, 0) scale(1);
-    border-color: rgba(0, 210, 255, 0.9);
-  }
-  25% {
-    transform: translate(1px, -1px) scale(1.003);
-    border-color: rgba(255, 255, 255, 0.9);
-  }
-  50% {
-    transform: translate(-1px, 1px) scale(0.997);
-    border-color: rgba(0, 210, 255, 0.7);
-  }
-  75% {
-    transform: translate(1px, 0) scale(1.002);
-    border-color: rgba(255, 255, 255, 0.8);
-  }
-  100% {
-    transform: translate(0, 0) scale(1);
-    border-color: rgba(0, 210, 255, 0.9);
   }
 }
