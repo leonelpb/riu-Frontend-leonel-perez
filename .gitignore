@@ -70,3 +70,5 @@ src/environments/environment.prod.ts
 
 # Documentation
 /docs
+# Lighthouse reports
+lighthouse-*.json
