@@ -2,6 +2,8 @@ import { HeroMapper } from './hero.mapper';
 import { SuperheroApiCharacter } from '../models/superhero-api.model';
 
 describe('HeroMapper', () => {
+  const BASE = 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images';
+
   const mockApiCharacter: SuperheroApiCharacter = {
     id: 70,
     name: 'Batman',
@@ -40,10 +42,10 @@ describe('HeroMapper', () => {
       relatives: 'Thomas Wayne (father), Martha Wayne (mother)',
     },
     images: {
-      xs: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/xs/70-batman.jpg',
-      sm: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/70-batman.jpg',
-      md: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/70-batman.jpg',
-      lg: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/70-batman.jpg',
+      xs: `${BASE}/xs/70-batman.jpg`,
+      sm: `${BASE}/sm/70-batman.jpg`,
+      md: `${BASE}/md/70-batman.jpg`,
+      lg: `${BASE}/lg/70-batman.jpg`,
     },
   };
 
@@ -54,7 +56,11 @@ describe('HeroMapper', () => {
       expect(hero.id).toBe(70);
       expect(hero.name).toBe('Batman');
       expect(hero.description).toBe('Bruce Wayne');
-      expect(hero.image).toBe('https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/70-batman.jpg');
+      expect(hero.image).toBe(`${BASE}/md/70-batman.jpg`);
+      expect(hero.images!.xs).toBe(`${BASE}/xs/70-batman.jpg`);
+      expect(hero.images!.sm).toBe(`${BASE}/sm/70-batman.jpg`);
+      expect(hero.images!.md).toBe(`${BASE}/md/70-batman.jpg`);
+      expect(hero.images!.lg).toBe(`${BASE}/lg/70-batman.jpg`);
       expect(hero.publisher).toBe('DC Comics');
       expect(hero.alignment).toBe('good');
       expect(hero.firstAppearance).toBe('Detective Comics #27');
@@ -90,6 +96,10 @@ describe('HeroMapper', () => {
       const charWithoutImages = { ...mockApiCharacter, images: undefined };
       const hero = HeroMapper.fromApiCharacter(charWithoutImages as unknown as SuperheroApiCharacter);
       expect(hero.image).toBe('');
+      expect(hero.images!.xs).toBe('');
+      expect(hero.images!.sm).toBe('');
+      expect(hero.images!.md).toBe('');
+      expect(hero.images!.lg).toBe('');
     });
 
     it('should fall back to lg when md is missing', () => {
@@ -140,7 +150,13 @@ describe('HeroMapper', () => {
         id: 70,
         name: 'Batman',
         description: 'Bruce Wayne',
-        image: 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/70-batman.jpg',
+        image: `${BASE}/md/70-batman.jpg`,
+        images: {
+          xs: `${BASE}/xs/70-batman.jpg`,
+          sm: `${BASE}/sm/70-batman.jpg`,
+          md: `${BASE}/md/70-batman.jpg`,
+          lg: `${BASE}/lg/70-batman.jpg`,
+        },
         publisher: 'DC Comics',
         alignment: 'good' as const,
         firstAppearance: 'Detective Comics #27',
@@ -154,7 +170,10 @@ describe('HeroMapper', () => {
       expect(apiChar.biography?.publisher).toBe('DC Comics');
       expect(apiChar.biography?.alignment).toBe('good');
       expect(apiChar.biography?.firstAppearance).toBe('Detective Comics #27');
-      expect(apiChar.images?.lg).toBe(hero.image);
+      expect(apiChar.images?.xs).toBe(hero.images.xs);
+      expect(apiChar.images?.sm).toBe(hero.images.sm);
+      expect(apiChar.images?.md).toBe(hero.images.md);
+      expect(apiChar.images?.lg).toBe(hero.images.lg);
     });
 
     it('should handle missing optional fields with defaults', () => {
@@ -163,6 +182,7 @@ describe('HeroMapper', () => {
         name: 'Test',
         description: 'Test desc',
         image: 'https://example.com/test.jpg',
+        images: { xs: '', sm: '', md: '', lg: '' },
       };
 
       const apiChar = HeroMapper.toApiCharacter(hero);
@@ -170,6 +190,8 @@ describe('HeroMapper', () => {
       expect(apiChar.biography?.publisher).toBe('-');
       expect(apiChar.biography?.alignment).toBe('neutral');
       expect(apiChar.biography?.firstAppearance).toBe('-');
+      expect(apiChar.images?.md).toBe('https://example.com/test.jpg');
+      expect(apiChar.images?.lg).toBe('https://example.com/test.jpg');
     });
   });
 });

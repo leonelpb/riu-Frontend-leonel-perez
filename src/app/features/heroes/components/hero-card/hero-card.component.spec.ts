@@ -25,7 +25,7 @@ describe('HeroCardComponent', () => {
   it('should display hero image', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const img = compiled.querySelector('.hero-card__image') as HTMLImageElement;
-    expect(img?.src).toContain('hero.jpg');
+    expect(img?.src).toContain('hero.sm.jpg');
   });
 
   it('should emit selectHero on click', () => {

@@ -21,7 +21,7 @@ import { BadgeComponent, BadgeVariant } from '../../../../shared/ui/badge/badge.
           <!-- Left column: image -->
           <div class="hero-details__image-wrapper">
             <img
-              [src]="hero.image"
+              [src]="hero.images?.lg || hero.images?.md || hero.image"
               [alt]="hero.name"
               class="hero-details__image"
               referrerpolicy="no-referrer"

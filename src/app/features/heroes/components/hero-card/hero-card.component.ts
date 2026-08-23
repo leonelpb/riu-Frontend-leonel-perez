@@ -34,7 +34,9 @@ import { BadgeComponent, BadgeVariant } from '../../../../shared/ui/badge/badge.
       <div class="hero-card__image-container">
         @if (hero.image) {
           <img
-            [src]="hero.image"
+            [src]="hero.images?.sm || hero.image"
+            [srcset]="hero.images?.md ? hero.images.md + ' 320w, ' + hero.images.lg + ' 640w' : ''"
+            sizes="(max-width: 576px) 25vw, (max-width: 900px) 16vw, 12vw"
             [alt]="hero.name"
             class="hero-card__image"
             loading="lazy"
@@ -63,7 +65,7 @@ import { BadgeComponent, BadgeVariant } from '../../../../shared/ui/badge/badge.
         >
           <div class="hero-card__overlay-header">
             <img
-              [src]="hero.image"
+              [src]="hero.images?.xs || hero.images?.sm || hero.image"
               [alt]="hero.name"
               class="hero-card__overlay-image"
               referrerpolicy="no-referrer"

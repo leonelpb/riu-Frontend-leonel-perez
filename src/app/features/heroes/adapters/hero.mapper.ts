@@ -8,6 +8,12 @@ export class HeroMapper {
       name: character.name,
       description: character.biography?.fullName || character.name,
       image: character.images?.md || character.images?.lg || '',
+      images: {
+        xs: character.images?.xs || '',
+        sm: character.images?.sm || '',
+        md: character.images?.md || '',
+        lg: character.images?.lg || '',
+      },
       publisher: character.biography?.publisher,
       alignment: character.biography?.alignment as Hero['alignment'],
       firstAppearance: character.biography?.firstAppearance,
@@ -34,10 +40,10 @@ export class HeroMapper {
         alignment: hero.alignment || 'neutral',
       },
       images: {
-        xs: '',
-        sm: '',
-        md: hero.image,
-        lg: hero.image,
+        xs: hero.images?.xs || '',
+        sm: hero.images?.sm || '',
+        md: hero.images?.md || hero.image,
+        lg: hero.images?.lg || hero.image,
       },
     };
   }
