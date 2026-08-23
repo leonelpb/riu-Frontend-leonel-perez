@@ -1,5 +1,6 @@
-import { ApplicationConfig, provideZonelessChangeDetection, APP_INITIALIZER } from '@angular/core';
+import { ApplicationConfig, provideZonelessChangeDetection, APP_INITIALIZER, isDevMode } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
 import { routes } from './app.routes';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
@@ -22,5 +23,9 @@ export const appConfig: ApplicationConfig = {
       deps: [HeroRepository],
       multi: true,
     },
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
 };
