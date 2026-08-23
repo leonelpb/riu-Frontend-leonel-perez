@@ -39,7 +39,8 @@ import { BadgeComponent, BadgeVariant } from '../../../../shared/ui/badge/badge.
             sizes="(max-width: 576px) 25vw, (max-width: 900px) 16vw, 12vw"
             [alt]="hero.name"
             class="hero-card__image"
-            loading="lazy"
+            [attr.loading]="priority ? null : 'lazy'"
+            [attr.fetchpriority]="priority ? 'high' : null"
             referrerpolicy="no-referrer"
             (error)="onImageError($event)"
           />
@@ -134,6 +135,7 @@ export class HeroCardComponent {
   @Input() showActions = true;
   @Input() suppressOverlay = false;
   @Input() overlayOnTop = false;
+  @Input() priority = false;
 
   @Output() selectHero = new EventEmitter<Hero>();
   @Output() hoverStart = new EventEmitter<Hero>();
