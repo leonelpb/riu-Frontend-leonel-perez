@@ -55,7 +55,7 @@ export class HeroRepository {
       catchError((error) => {
         console.error('HeroRepository: API seed failed, degrading to empty state', error);
         return of(undefined);
-      }),
+      })
     );
   }
 }

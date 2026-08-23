@@ -223,9 +223,7 @@ describe('HeroLocalRepository', () => {
       repo.initialize([...MOCK_HEROES]);
 
       // Create, then find via search
-      await firstValueFrom(
-        repo.create({ name: 'Post-Merge Hero', description: 'created after seed', image: '' })
-      );
+      await firstValueFrom(repo.create({ name: 'Post-Merge Hero', description: 'created after seed', image: '' }));
 
       const results = await firstValueFrom(repo.searchByName('Post-Merge'));
       expect(results.some((h) => h.name === 'Post-Merge Hero')).toBeTrue();
