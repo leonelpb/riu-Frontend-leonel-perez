@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HeroCardComponent } from './hero-card.component';
 import { createMockHero } from '../../testing/mock-heroes';
 
@@ -46,12 +46,12 @@ describe('HeroCardComponent', () => {
     expect(component.hoverStart.emit).toHaveBeenCalledWith(mockHero);
   });
 
-  it('should emit hoverEnd on mouseleave', fakeAsync(() => {
+  it('should emit hoverEnd on mouseleave', async () => {
     spyOn(component.hoverEnd, 'emit');
     component.onMouseLeave();
-    tick(120);
+    await new Promise((resolve) => setTimeout(resolve, 130));
     expect(component.hoverEnd.emit).toHaveBeenCalled();
-  }));
+  });
 
   it('should apply selected class when selected', () => {
     fixture.componentRef.setInput('selected', true);
@@ -133,16 +133,16 @@ describe('HeroCardComponent', () => {
     expect(compiled.querySelector('.hero-card__overlay')).toBeFalsy();
   });
 
-  it('should hide overlay when mouse leaves', fakeAsync(() => {
+  it('should hide overlay when mouse leaves', async () => {
     component.onMouseEnter();
     fixture.detectChanges();
     component.onMouseLeave();
-    tick(120);
+    await new Promise((resolve) => setTimeout(resolve, 130));
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.hero-card__overlay')).toBeFalsy();
-  }));
+  });
 
   it('should not show overlay when selected (overlay removed)', () => {
     fixture.componentRef.setInput('selected', true);

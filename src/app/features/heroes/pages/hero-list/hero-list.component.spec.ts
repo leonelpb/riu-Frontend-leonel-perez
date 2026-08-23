@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { HeroListComponent } from './hero-list.component';
@@ -70,50 +70,50 @@ describe('HeroListComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should filter heroes by search term', fakeAsync(() => {
+    it('should filter heroes by search term', async () => {
       component.onSearchTermChange('batman');
-      tick(350);
+      await new Promise((resolve) => setTimeout(resolve, 350));
 
       expect(component.searchTerm()).toBe('batman');
       expect(component.filteredHeroes().every((h) => h.name.toLowerCase().includes('batman'))).toBeTrue();
-    }));
+    });
 
-    it('should show all heroes when search is cleared', fakeAsync(() => {
+    it('should show all heroes when search is cleared', async () => {
       component.onSearchTermChange('batman');
-      tick(350);
+      await new Promise((resolve) => setTimeout(resolve, 350));
 
       component.onSearchTermChange('');
-      tick(350);
+      await new Promise((resolve) => setTimeout(resolve, 350));
 
       expect(component.filteredHeroes().length).toBe(MOCK_HEROES.length);
-    }));
+    });
 
-    it('should reset to page 1 when search changes', fakeAsync(() => {
+    it('should reset to page 1 when search changes', async () => {
       component.currentPage.set(3);
       component.onSearchTermChange('test');
-      tick(350);
+      await new Promise((resolve) => setTimeout(resolve, 350));
 
       expect(component.currentPage()).toBe(1);
-    }));
+    });
 
-    it('should debounce search input', fakeAsync(() => {
+    it('should debounce search input', async () => {
       component.onSearchTermChange('b');
       component.onSearchTermChange('ba');
       component.onSearchTermChange('bat');
-      tick(350);
+      await new Promise((resolve) => setTimeout(resolve, 350));
 
       expect(component.searchTerm()).toBe('bat');
-    }));
+    });
 
-    it('should not update search if same term is emitted twice', fakeAsync(() => {
+    it('should not update search if same term is emitted twice', async () => {
       component.onSearchTermChange('batman');
-      tick(350);
+      await new Promise((resolve) => setTimeout(resolve, 350));
 
       component.onSearchTermChange('batman');
-      tick(350);
+      await new Promise((resolve) => setTimeout(resolve, 350));
 
       expect(component.searchTerm()).toBe('batman');
-    }));
+    });
   });
 
   describe('Pagination', () => {
@@ -144,14 +144,14 @@ describe('HeroListComponent', () => {
   });
 
   describe('Empty State', () => {
-    it('should show empty state when no heroes match search', fakeAsync(() => {
+    it('should show empty state when no heroes match search', async () => {
       fixture.detectChanges();
 
       component.onSearchTermChange('zzzznotfound');
-      tick(350);
+      await new Promise((resolve) => setTimeout(resolve, 350));
 
       expect(component.filteredHeroes().length).toBe(0);
-    }));
+    });
   });
 
   describe('Delete Flow', () => {

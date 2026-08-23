@@ -1,9 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { of, throwError } from 'rxjs';
+import { firstValueFrom, of, throwError } from 'rxjs';
 import { HeroService } from './hero.service';
 import { HeroRepository } from '../data/hero.repository';
 import { MOCK_HEROES, MOCK_SINGLE_HERO } from '../testing/mock-heroes';
-import { createAppError } from '../../../models/app-error.model';
 
 describe('HeroService', () => {
   let service: HeroService;
@@ -39,15 +38,17 @@ describe('HeroService', () => {
       expect(repository.getAll).toHaveBeenCalled();
     });
 
-    it('should throw typed error on failure', (done) => {
+    it('should throw typed error on failure', async () => {
       repository.getAll.and.returnValue(throwError(() => new Error('API error')));
 
-      service.getAll().subscribe({
-        error: (err) => {
-          expect(err.code).toBe('API_DOWN');
-          done();
-        },
-      });
+      let err: any = null;
+      try {
+        await firstValueFrom(service.getAll());
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err.code).toBe('API_DOWN');
     });
   });
 
@@ -71,15 +72,17 @@ describe('HeroService', () => {
       });
     });
 
-    it('should throw typed NOT_FOUND error on failure', (done) => {
+    it('should throw typed NOT_FOUND error on failure', async () => {
       repository.getById.and.returnValue(throwError(() => new Error('Not found')));
 
-      service.getById('99999').subscribe({
-        error: (err) => {
-          expect(err.code).toBe('NOT_FOUND');
-          done();
-        },
-      });
+      let err: any = null;
+      try {
+        await firstValueFrom(service.getById('99999'));
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err.code).toBe('NOT_FOUND');
     });
   });
 
@@ -124,15 +127,17 @@ describe('HeroService', () => {
       });
     });
 
-    it('should throw typed error on search failure', (done) => {
+    it('should throw typed error on search failure', async () => {
       repository.searchByName.and.returnValue(throwError(() => new Error('Search failed')));
 
-      service.searchByName('batman').subscribe({
-        error: (err) => {
-          expect(err.code).toBe('API_DOWN');
-          done();
-        },
-      });
+      let err: any = null;
+      try {
+        await firstValueFrom(service.searchByName('batman'));
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err.code).toBe('API_DOWN');
     });
   });
 
@@ -157,43 +162,53 @@ describe('HeroService', () => {
       expect(repository.create).toHaveBeenCalledWith(newHero);
     });
 
-    it('should throw INCOMPLETE_DATA error when name is empty', (done) => {
-      service.create({ name: '', description: 'test', image: 'https://example.com/img.jpg' }).subscribe({
-        error: (err) => {
-          expect(err.code).toBe('INCOMPLETE_DATA');
-          done();
-        },
-      });
+    it('should throw INCOMPLETE_DATA error when name is empty', async () => {
+      let err: any = null;
+      try {
+        await firstValueFrom(service.create({ name: '', description: 'test', image: 'https://example.com/img.jpg' }));
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err.code).toBe('INCOMPLETE_DATA');
     });
 
-    it('should throw INCOMPLETE_DATA error when name is whitespace only', (done) => {
-      service.create({ name: '   ', description: 'test', image: 'https://example.com/img.jpg' }).subscribe({
-        error: (err) => {
-          expect(err.code).toBe('INCOMPLETE_DATA');
-          done();
-        },
-      });
+    it('should throw INCOMPLETE_DATA error when name is whitespace only', async () => {
+      let err: any = null;
+      try {
+        await firstValueFrom(
+          service.create({ name: '   ', description: 'test', image: 'https://example.com/img.jpg' })
+        );
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err.code).toBe('INCOMPLETE_DATA');
     });
 
-    it('should throw INCOMPLETE_DATA error when name is undefined', (done) => {
-      service.create({ description: 'test', image: 'https://example.com/img.jpg' } as any).subscribe({
-        error: (err) => {
-          expect(err.code).toBe('INCOMPLETE_DATA');
-          done();
-        },
-      });
+    it('should throw INCOMPLETE_DATA error when name is undefined', async () => {
+      let err: any = null;
+      try {
+        await firstValueFrom(service.create({ description: 'test', image: 'https://example.com/img.jpg' } as any));
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err.code).toBe('INCOMPLETE_DATA');
     });
 
-    it('should propagate repository create error', (done) => {
+    it('should propagate repository create error', async () => {
       const newHero = { name: 'Hero', description: 'desc', image: 'https://example.com/img.jpg' };
       repository.create.and.returnValue(throwError(() => new Error('Create failed')));
 
-      service.create(newHero).subscribe({
-        error: (err) => {
-          expect(err.code).toBe('HTTP_ERROR');
-          done();
-        },
-      });
+      let err: any = null;
+      try {
+        await firstValueFrom(service.create(newHero));
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err.code).toBe('HTTP_ERROR');
     });
   });
 
@@ -209,15 +224,17 @@ describe('HeroService', () => {
       expect(repository.update).toHaveBeenCalledWith(updatedHero);
     });
 
-    it('should propagate repository update error', (done) => {
+    it('should propagate repository update error', async () => {
       repository.update.and.returnValue(throwError(() => new Error('Update failed')));
 
-      service.update(MOCK_SINGLE_HERO).subscribe({
-        error: (err) => {
-          expect(err.code).toBe('HTTP_ERROR');
-          done();
-        },
-      });
+      let err: any = null;
+      try {
+        await firstValueFrom(service.update(MOCK_SINGLE_HERO));
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err.code).toBe('HTTP_ERROR');
     });
   });
 
@@ -232,15 +249,17 @@ describe('HeroService', () => {
       expect(repository.delete).toHaveBeenCalledWith(70);
     });
 
-    it('should propagate repository delete error', (done) => {
+    it('should propagate repository delete error', async () => {
       repository.delete.and.returnValue(throwError(() => new Error('Delete failed')));
 
-      service.delete(999).subscribe({
-        error: (err) => {
-          expect(err.code).toBe('HTTP_ERROR');
-          done();
-        },
-      });
+      let err: any = null;
+      try {
+        await firstValueFrom(service.delete(999));
+      } catch (e) {
+        err = e;
+      }
+
+      expect(err.code).toBe('HTTP_ERROR');
     });
   });
 });

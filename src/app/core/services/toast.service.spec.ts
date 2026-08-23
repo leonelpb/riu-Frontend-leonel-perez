@@ -1,4 +1,4 @@
-import { fakeAsync, tick, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ToastService } from './toast.service';
 
 describe('ToastService', () => {
@@ -22,13 +22,13 @@ describe('ToastService', () => {
       expect(service.toasts()[0].message).toBe('Operation completed');
     });
 
-    it('should auto-remove toast after 3 seconds', fakeAsync(() => {
+    it('should auto-remove toast after 3 seconds', async () => {
       service.success('Test');
       expect(service.toasts().length).toBe(1);
 
-      tick(3000);
+      await new Promise((resolve) => setTimeout(resolve, 3001));
       expect(service.toasts().length).toBe(0);
-    }));
+    });
   });
 
   describe('error', () => {
@@ -39,13 +39,14 @@ describe('ToastService', () => {
       expect(service.toasts()[0].message).toBe('Something failed');
     });
 
-    it('should auto-remove error toast after 5 seconds', fakeAsync(() => {
+    // Real 5001ms wait exceeds Jasmine's default 5000ms spec timeout, so raise it
+    it('should auto-remove error toast after 5 seconds', async () => {
       service.error('Error');
       expect(service.toasts().length).toBe(1);
 
-      tick(5000);
+      await new Promise((resolve) => setTimeout(resolve, 5001));
       expect(service.toasts().length).toBe(0);
-    }));
+    }, 7000);
   });
 
   describe('info', () => {
@@ -55,21 +56,22 @@ describe('ToastService', () => {
       expect(service.toasts()[0].type).toBe('info');
     });
 
-    it('should auto-remove info toast after 3 seconds', fakeAsync(() => {
+    it('should auto-remove info toast after 3 seconds', async () => {
       service.info('Info');
-      tick(3000);
+
+      await new Promise((resolve) => setTimeout(resolve, 3001));
       expect(service.toasts().length).toBe(0);
-    }));
+    });
   });
 
   describe('show', () => {
-    it('should add toast with custom duration', fakeAsync(() => {
+    it('should add toast with custom duration', async () => {
       service.show('Quick toast', 'success', 1000);
       expect(service.toasts().length).toBe(1);
 
-      tick(1000);
+      await new Promise((resolve) => setTimeout(resolve, 1001));
       expect(service.toasts().length).toBe(0);
-    }));
+    });
 
     it('should support multiple toasts', () => {
       service.success('First');
