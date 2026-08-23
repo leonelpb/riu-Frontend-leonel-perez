@@ -21,8 +21,7 @@ export class HeroApiRepository {
 
   getAll(): Observable<Hero[]> {
     return this.fetchAllCharacters().pipe(
-      map((characters) => HeroMapper.fromApiCharacters(characters)),
-      catchError(() => of([]))
+      map((characters) => HeroMapper.fromApiCharacters(characters))
     );
   }
 

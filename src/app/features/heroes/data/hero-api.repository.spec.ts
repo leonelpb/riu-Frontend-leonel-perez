@@ -95,9 +95,12 @@ describe('HeroApiRepository', () => {
       req.flush(mockCharacters);
     });
 
-    it('should return empty array on HTTP error', () => {
-      repository.getAll().subscribe((heroes) => {
-        expect(heroes).toEqual([]);
+    it('should propagate HTTP error (no silent fallback)', (done) => {
+      repository.getAll().subscribe({
+        error: (err) => {
+          expect(err).toBeTruthy();
+          done();
+        },
       });
 
       const req = httpMock.expectOne((r) => ALL_URL.test(r.url));

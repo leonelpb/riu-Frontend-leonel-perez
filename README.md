@@ -109,10 +109,12 @@ src/app/
 ### Data Flow
 
 ```
-Component → HeroService → HeroRepository → HeroApiRepository (reads via CDN)
-                                          → HeroLocalRepository (writes, in-memory)
-                                          → HeroMapper (API ↔ Domain)
+Component → HeroService → HeroRepository → HeroApiRepository (seed: one-time fetch from CDN)
+                                          → HeroLocalRepository (single source of truth for all reads/writes)
+                                          → HeroMapper (API ↔ Domain on initial seed only)
 ```
+
+After initialization, **all CRUD operations, search, and getById read from and write to the local in-memory repository**. The external API is only called once to seed the initial dataset.
 
 ### State Management
 

@@ -39,11 +39,14 @@ describe('HeroService', () => {
       expect(repository.getAll).toHaveBeenCalled();
     });
 
-    it('should return empty array on error', () => {
+    it('should throw typed error on failure', (done) => {
       repository.getAll.and.returnValue(throwError(() => new Error('API error')));
 
-      service.getAll().subscribe((heroes) => {
-        expect(heroes).toEqual([]);
+      service.getAll().subscribe({
+        error: (err) => {
+          expect(err.code).toBe('API_DOWN');
+          done();
+        },
       });
     });
   });
@@ -68,11 +71,14 @@ describe('HeroService', () => {
       });
     });
 
-    it('should return null on error', () => {
+    it('should throw typed NOT_FOUND error on failure', (done) => {
       repository.getById.and.returnValue(throwError(() => new Error('Not found')));
 
-      service.getById('99999').subscribe((hero) => {
-        expect(hero).toBeNull();
+      service.getById('99999').subscribe({
+        error: (err) => {
+          expect(err.code).toBe('NOT_FOUND');
+          done();
+        },
       });
     });
   });
@@ -118,11 +124,14 @@ describe('HeroService', () => {
       });
     });
 
-    it('should return empty array on search error', () => {
+    it('should throw typed error on search failure', (done) => {
       repository.searchByName.and.returnValue(throwError(() => new Error('Search failed')));
 
-      service.searchByName('batman').subscribe((heroes) => {
-        expect(heroes).toEqual([]);
+      service.searchByName('batman').subscribe({
+        error: (err) => {
+          expect(err.code).toBe('API_DOWN');
+          done();
+        },
       });
     });
   });

@@ -12,7 +12,7 @@ export class HeroService {
     return this.repository.getAll().pipe(
       catchError((error) => {
         console.error('Failed to fetch heroes:', error);
-        return of([]);
+        return throwError(() => createAppError('API_DOWN', 'Failed to load heroes. Please try again.', error));
       })
     );
   }
@@ -25,7 +25,7 @@ export class HeroService {
     return this.repository.getById(numericId).pipe(
       catchError((error) => {
         console.error(`Failed to fetch hero ${id}:`, error);
-        return of(null);
+        return throwError(() => createAppError('NOT_FOUND', `Hero ${id} not found`, error));
       })
     );
   }
@@ -36,7 +36,7 @@ export class HeroService {
     return this.repository.searchByName(name).pipe(
       catchError((error) => {
         console.error(`Failed to search heroes by name "${name}":`, error);
-        return of([]);
+        return throwError(() => createAppError('API_DOWN', 'Search failed. Please try again.', error));
       })
     );
   }
