@@ -15,6 +15,7 @@ describe('HeroRepository', () => {
     localRepo = jasmine.createSpyObj('HeroLocalRepository', [
       'getAll',
       'getById',
+      'searchByName',
       'create',
       'update',
       'delete',
@@ -58,38 +59,41 @@ describe('HeroRepository', () => {
   });
 
   describe('getById', () => {
-    it('should return hero from API when found', (done) => {
+    it('should return hero from local state after initialization', (done) => {
       const batman = MOCK_HEROES[0];
-      apiRepo.getById.and.returnValue(of(batman));
+      apiRepo.getAll.and.returnValue(of(MOCK_HEROES));
+      localRepo.getById.and.returnValue(of(batman));
 
       repository.getById(70).subscribe((hero) => {
+        expect(localRepo.getById).toHaveBeenCalledWith(70);
+        expect(apiRepo.getById).not.toHaveBeenCalled();
         expect(hero).toEqual(batman);
         done();
       });
     });
 
-    it('should fallback to local repo when API returns null', (done) => {
-      const batman = MOCK_HEROES[0];
-      apiRepo.getById.and.returnValue(of(null));
-      localRepo.getById.and.returnValue(of(batman));
+    it('should not query API directly for getById', (done) => {
+      apiRepo.getAll.and.returnValue(of(MOCK_HEROES));
+      localRepo.getById.and.returnValue(of(null));
 
-      repository.getById(70).subscribe((hero) => {
-        expect(localRepo.getById).toHaveBeenCalledWith(70);
-        expect(hero).toEqual(batman);
+      repository.getById(99999).subscribe((hero) => {
+        expect(apiRepo.getById).not.toHaveBeenCalled();
+        expect(hero).toBeNull();
         done();
       });
     });
   });
 
   describe('searchByName', () => {
-    it('should initialize then delegate to API search', (done) => {
+    it('should search local state after initialization', (done) => {
       apiRepo.getAll.and.returnValue(of(MOCK_HEROES));
-      const batman = MOCK_HEROES[0];
-      apiRepo.searchByName.and.returnValue(of([batman]));
+      const batmanHeroes = MOCK_HEROES.filter((h) => h.name.toLowerCase().includes('bat'));
+      localRepo.searchByName.and.returnValue(of(batmanHeroes));
 
       repository.searchByName('Bat').subscribe((heroes) => {
-        expect(heroes.length).toBe(1);
-        expect(heroes[0].name).toBe('Batman');
+        expect(localRepo.searchByName).toHaveBeenCalledWith('Bat');
+        expect(apiRepo.searchByName).not.toHaveBeenCalled();
+        expect(heroes.length).toBeGreaterThan(0);
         done();
       });
     });
@@ -129,6 +133,69 @@ describe('HeroRepository', () => {
         expect(localRepo.delete).toHaveBeenCalledWith(999);
         expect(result).toBeTrue();
         done();
+      });
+    });
+  });
+
+  describe('CRUD integration sequences', () => {
+    it('create → searchByName: created hero should appear in search', (done) => {
+      const newHero = createMockHero({ name: 'Wonder Bat' });
+      apiRepo.getAll.and.returnValue(of(MOCK_HEROES));
+      localRepo.create.and.callFake((hero) => of({ ...hero, id: 1001 }));
+      localRepo.searchByName.and.callFake((name) => {
+        const allWithNew = [...MOCK_HEROES, { ...newHero, id: 1001 }];
+        return of(allWithNew.filter((h) => h.name.toLowerCase().includes(name.toLowerCase())));
+      });
+
+      repository.create(newHero).pipe().subscribe(() => {
+        repository.searchByName('Wonder').subscribe((results) => {
+          expect(results.some((h) => h.name === 'Wonder Bat')).toBeTrue();
+          done();
+        });
+      });
+    });
+
+    it('update → getById: edited value should persist on re-read', (done) => {
+      const original = MOCK_HEROES[0];
+      const edited = { ...original, name: 'Batman Edited' };
+      apiRepo.getAll.and.returnValue(of(MOCK_HEROES));
+      localRepo.update.and.callFake((hero) => of({ ...hero }));
+      localRepo.getById.and.callFake((id) => {
+        if (id === original.id) return of(edited);
+        return of(null);
+      });
+
+      repository.update(edited).pipe().subscribe(() => {
+        repository.getById(original.id).subscribe((hero) => {
+          expect(hero?.name).toBe('Batman Edited');
+          done();
+        });
+      });
+    });
+
+    it('delete → getById: deleted hero should not be found', (done) => {
+      apiRepo.getAll.and.returnValue(of(MOCK_HEROES));
+      localRepo.delete.and.returnValue(of(true));
+      localRepo.getById.and.returnValue(of(null));
+
+      repository.delete(70).pipe().subscribe(() => {
+        repository.getById(70).subscribe((hero) => {
+          expect(hero).toBeNull();
+          done();
+        });
+      });
+    });
+
+    it('delete → searchByName: deleted hero should not appear in search', (done) => {
+      apiRepo.getAll.and.returnValue(of(MOCK_HEROES));
+      localRepo.delete.and.returnValue(of(true));
+      localRepo.searchByName.and.returnValue(of([]));
+
+      repository.delete(70).pipe().subscribe(() => {
+        repository.searchByName('Batman').subscribe((results) => {
+          expect(results.length).toBe(0);
+          done();
+        });
       });
     });
   });

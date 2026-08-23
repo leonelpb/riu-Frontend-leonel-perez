@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { UppercaseDirective } from './uppercase.directive';
 
 @Component({
@@ -9,6 +9,14 @@ import { UppercaseDirective } from './uppercase.directive';
 })
 class TestHostComponent {
   value = '';
+}
+
+@Component({
+  template: `<input type="text" [formControl]="control" appUppercase />`,
+  imports: [ReactiveFormsModule, UppercaseDirective],
+})
+class ReactiveTestHostComponent {
+  control = new FormControl('');
 }
 
 describe('UppercaseDirective', () => {
@@ -58,5 +66,37 @@ describe('UppercaseDirective', () => {
     input.value = 'BATMAN';
     input.dispatchEvent(new Event('input'));
     expect(input.value).toBe('BATMAN');
+  });
+});
+
+describe('UppercaseDirective — Reactive Forms sync', () => {
+  let fixture: ComponentFixture<ReactiveTestHostComponent>;
+  let host: ReactiveTestHostComponent;
+  let input: HTMLInputElement;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ReactiveTestHostComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ReactiveTestHostComponent);
+    host = fixture.componentInstance;
+    fixture.detectChanges();
+    input = fixture.nativeElement.querySelector('input');
+  });
+
+  it('should sync uppercase value back to FormControl model', () => {
+    input.value = 'batman';
+    input.dispatchEvent(new Event('input'));
+
+    expect(host.control.value).toBe('BATMAN');
+  });
+
+  it('should display and store uppercase consistently', () => {
+    input.value = 'iron man';
+    input.dispatchEvent(new Event('input'));
+
+    expect(input.value).toBe('IRON MAN');
+    expect(host.control.value).toBe('IRON MAN');
   });
 });

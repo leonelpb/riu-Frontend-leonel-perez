@@ -66,6 +66,59 @@ describe('HeroLocalRepository', () => {
     }));
   });
 
+  describe('searchByName', () => {
+    it('should filter heroes by name (case-insensitive)', fakeAsync(() => {
+      let result: any[] = [];
+      repository.searchByName('bat').subscribe((heroes) => {
+        result = heroes;
+      });
+      tick(300);
+      flush();
+
+      expect(result.length).toBe(3); // Batman, Batman Beyond, Batman II
+      result.forEach((h) => expect(h.name.toLowerCase()).toContain('bat'));
+    }));
+
+    it('should return empty array when no match', fakeAsync(() => {
+      let result: any[] = [];
+      repository.searchByName('zzzznotfound').subscribe((heroes) => {
+        result = heroes;
+      });
+      tick(300);
+      flush();
+
+      expect(result).toEqual([]);
+    }));
+
+    it('should include locally created heroes in search results', fakeAsync(() => {
+      repository.create({ name: 'Wonder Bat', description: 'test', image: 'https://example.com/img.jpg' }).subscribe();
+      tick(300);
+
+      let result: any[] = [];
+      repository.searchByName('Wonder').subscribe((heroes) => {
+        result = heroes;
+      });
+      tick(300);
+      flush();
+
+      expect(result.some((h) => h.name === 'Wonder Bat')).toBeTrue();
+    }));
+
+    it('should exclude deleted heroes from search results', fakeAsync(() => {
+      repository.delete(70).subscribe();
+      tick(300);
+
+      let result: any[] = [];
+      repository.searchByName('Batman').subscribe((heroes) => {
+        result = heroes;
+      });
+      tick(300);
+      flush();
+
+      expect(result.some((h) => h.id === 70)).toBeFalse();
+    }));
+  });
+
   describe('create', () => {
     it('should create a new hero with auto-generated id', fakeAsync(() => {
       const newHero = { name: 'New Hero', description: 'Test', image: 'https://example.com/img.jpg' };

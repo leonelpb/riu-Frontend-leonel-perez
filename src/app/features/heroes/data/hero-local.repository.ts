@@ -23,6 +23,11 @@ export class HeroLocalRepository {
     return of(hero).pipe(delay(200));
   }
 
+  searchByName(name: string): Observable<Hero[]> {
+    const filtered = this.heroes.filter((h) => h.name.toLowerCase().includes(name.toLowerCase()));
+    return of([...filtered]).pipe(delay(300));
+  }
+
   create(hero: Omit<Hero, 'id'>): Observable<Hero> {
     const newHero: Hero = { ...hero, id: this.nextId++ };
     this.heroes.push(newHero);

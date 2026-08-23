@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, switchMap, of, map } from 'rxjs';
+import { Observable, switchMap, of } from 'rxjs';
 import { Hero } from '../models/hero.model';
 import { HeroApiRepository } from './hero-api.repository';
 import { HeroLocalRepository } from './hero-local.repository';
@@ -10,24 +10,19 @@ export class HeroRepository {
   private readonly local = inject(HeroLocalRepository);
   private initialized = false;
 
+  /** Seed once from API, then all reads/writes go through local. */
   getAll(): Observable<Hero[]> {
     return this.ensureInitialized().pipe(switchMap(() => this.local.getAll()));
   }
 
+  /** Single source of truth: local state only. */
   getById(id: number): Observable<Hero | null> {
-    return this.api.getById(id).pipe(switchMap((hero) => (hero ? of(hero) : this.local.getById(id))));
+    return this.ensureInitialized().pipe(switchMap(() => this.local.getById(id)));
   }
 
+  /** Single source of truth: search local collection only. */
   searchByName(name: string): Observable<Hero[]> {
-    return this.ensureInitialized().pipe(
-      switchMap(() =>
-        this.api.searchByName(name).pipe(
-          map((apiHeroes) => {
-            return apiHeroes;
-          })
-        )
-      )
-    );
+    return this.ensureInitialized().pipe(switchMap(() => this.local.searchByName(name)));
   }
 
   create(hero: Omit<Hero, 'id'>): Observable<Hero> {
