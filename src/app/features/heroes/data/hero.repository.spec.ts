@@ -147,12 +147,15 @@ describe('HeroRepository', () => {
         return of(allWithNew.filter((h) => h.name.toLowerCase().includes(name.toLowerCase())));
       });
 
-      repository.create(newHero).pipe().subscribe(() => {
-        repository.searchByName('Wonder').subscribe((results) => {
-          expect(results.some((h) => h.name === 'Wonder Bat')).toBeTrue();
-          done();
+      repository
+        .create(newHero)
+        .pipe()
+        .subscribe(() => {
+          repository.searchByName('Wonder').subscribe((results) => {
+            expect(results.some((h) => h.name === 'Wonder Bat')).toBeTrue();
+            done();
+          });
         });
-      });
     });
 
     it('update → getById: edited value should persist on re-read', (done) => {
@@ -165,12 +168,15 @@ describe('HeroRepository', () => {
         return of(null);
       });
 
-      repository.update(edited).pipe().subscribe(() => {
-        repository.getById(original.id).subscribe((hero) => {
-          expect(hero?.name).toBe('Batman Edited');
-          done();
+      repository
+        .update(edited)
+        .pipe()
+        .subscribe(() => {
+          repository.getById(original.id).subscribe((hero) => {
+            expect(hero?.name).toBe('Batman Edited');
+            done();
+          });
         });
-      });
     });
 
     it('delete → getById: deleted hero should not be found', (done) => {
@@ -178,12 +184,15 @@ describe('HeroRepository', () => {
       localRepo.delete.and.returnValue(of(true));
       localRepo.getById.and.returnValue(of(null));
 
-      repository.delete(70).pipe().subscribe(() => {
-        repository.getById(70).subscribe((hero) => {
-          expect(hero).toBeNull();
-          done();
+      repository
+        .delete(70)
+        .pipe()
+        .subscribe(() => {
+          repository.getById(70).subscribe((hero) => {
+            expect(hero).toBeNull();
+            done();
+          });
         });
-      });
     });
 
     it('delete → searchByName: deleted hero should not appear in search', (done) => {
@@ -191,12 +200,15 @@ describe('HeroRepository', () => {
       localRepo.delete.and.returnValue(of(true));
       localRepo.searchByName.and.returnValue(of([]));
 
-      repository.delete(70).pipe().subscribe(() => {
-        repository.searchByName('Batman').subscribe((results) => {
-          expect(results.length).toBe(0);
-          done();
+      repository
+        .delete(70)
+        .pipe()
+        .subscribe(() => {
+          repository.searchByName('Batman').subscribe((results) => {
+            expect(results.length).toBe(0);
+            done();
+          });
         });
-      });
     });
   });
 });

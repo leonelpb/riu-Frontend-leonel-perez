@@ -20,9 +20,7 @@ export class HeroApiRepository {
   }
 
   getAll(): Observable<Hero[]> {
-    return this.fetchAllCharacters().pipe(
-      map((characters) => HeroMapper.fromApiCharacters(characters))
-    );
+    return this.fetchAllCharacters().pipe(map((characters) => HeroMapper.fromApiCharacters(characters)));
   }
 
   searchByName(name: string): Observable<Hero[]> {
