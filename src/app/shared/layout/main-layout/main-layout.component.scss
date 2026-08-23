@@ -24,7 +24,7 @@
 .y2k-frame {
   position: fixed;
   inset: 0;
-  background-image: url('/tama.png');
+  background-image: url('/tama.webp');
   background-position: center;
   background-size: 250%;
   background-repeat: no-repeat;
@@ -38,7 +38,7 @@
 
   // Desktop: switch to crt.pngs
   @media (min-width: 1025px) and (max-width: 2000px) {
-    background-image: url('/crt.png');
+    background-image: url('/crt.webp');
     background-size: 140%;
   }
 

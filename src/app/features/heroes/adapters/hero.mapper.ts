@@ -7,7 +7,7 @@ export class HeroMapper {
       id: character.id,
       name: character.name,
       description: character.biography?.fullName || character.name,
-      image: character.images?.lg || character.images?.md || '',
+      image: character.images?.md || character.images?.lg || '',
       publisher: character.biography?.publisher,
       alignment: character.biography?.alignment as Hero['alignment'],
       firstAppearance: character.biography?.firstAppearance,

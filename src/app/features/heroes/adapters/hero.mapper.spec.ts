@@ -54,7 +54,7 @@ describe('HeroMapper', () => {
       expect(hero.id).toBe(70);
       expect(hero.name).toBe('Batman');
       expect(hero.description).toBe('Bruce Wayne');
-      expect(hero.image).toBe('https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/70-batman.jpg');
+      expect(hero.image).toBe('https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/70-batman.jpg');
       expect(hero.publisher).toBe('DC Comics');
       expect(hero.alignment).toBe('good');
       expect(hero.firstAppearance).toBe('Detective Comics #27');
@@ -92,13 +92,13 @@ describe('HeroMapper', () => {
       expect(hero.image).toBe('');
     });
 
-    it('should fall back to md when lg is missing', () => {
-      const charNoLg: SuperheroApiCharacter = {
+    it('should fall back to lg when md is missing', () => {
+      const charNoMd: SuperheroApiCharacter = {
         ...mockApiCharacter,
-        images: { ...mockApiCharacter.images, lg: '' },
+        images: { ...mockApiCharacter.images, md: '' },
       };
-      const hero = HeroMapper.fromApiCharacter(charNoLg);
-      expect(hero.image).toBe(mockApiCharacter.images.md);
+      const hero = HeroMapper.fromApiCharacter(charNoMd);
+      expect(hero.image).toBe(mockApiCharacter.images.lg);
     });
 
     it('should handle powerstats with null/undefined values (defaults to 0)', () => {
