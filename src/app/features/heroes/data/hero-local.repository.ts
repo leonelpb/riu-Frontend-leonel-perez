@@ -9,9 +9,24 @@ export class HeroLocalRepository {
   private heroes: Hero[] = [];
   private nextId = 1000;
 
-  initialize(heroes: Hero[]): void {
-    this.heroes = [...heroes];
-    this.nextId = Math.max(...heroes.map((h) => h.id), 732) + 1;
+  /**
+   * Merge API-seeded heroes with locally created ones.
+   *
+   * Previous behavior replaced the entire collection, which caused a race condition:
+   * a hero created before the seed arrived was silently overwritten when initialize()
+   * ran. The new behavior keeps locally created heroes and adds API heroes that don't
+   * already exist (by id), so no user mutation is ever lost.
+   *
+   * nextId is recalculated as max(all ids) + 1 to prevent collisions regardless of
+   * whether the local hero or the API hero has the higher id.
+   */
+  initialize(apiHeroes: Hero[] = []): void {
+    const existingIds = new Set(this.heroes.map((h) => h.id));
+    const newHeroes = apiHeroes.filter((h) => !existingIds.has(h.id));
+    this.heroes = [...this.heroes, ...newHeroes];
+
+    const allIds = this.heroes.map((h) => h.id);
+    this.nextId = allIds.length > 0 ? Math.max(...allIds) + 1 : 1000;
   }
 
   getAll(): Observable<Hero[]> {

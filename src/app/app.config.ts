@@ -2,14 +2,13 @@ import { ApplicationConfig, provideZonelessChangeDetection, APP_INITIALIZER, isD
 import { provideRouter } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { provideHttpClient, withInterceptors, withXhr } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { routes } from './app.routes';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { HeroRepository } from './features/heroes/data/hero.repository';
 
-function preloadHeroes(heroRepo: HeroRepository): () => void {
-  return () => {
-    heroRepo.getAll().subscribe();
-  };
+function preloadHeroes(heroRepo: HeroRepository): () => Promise<void> {
+  return () => firstValueFrom(heroRepo.getAll()).then(() => undefined);
 }
 
 export const appConfig: ApplicationConfig = {

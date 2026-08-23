@@ -156,15 +156,14 @@ describe('HeroLocalRepository', () => {
     });
   });
 
-  describe('initialize', () => {
-    it('should set nextId to max(existing id + 1, 733)', async () => {
-      // The initialize uses Math.max(...ids, 732) + 1, so even id=50 gives nextId=733
+  describe('initialize — merge behavior', () => {
+    it('should set nextId to max(existing id + 1, 1001)', async () => {
       const repo = new HeroLocalRepository();
       repo.initialize([{ id: 50, name: 'A', description: 'd', image: '' }]);
 
       const result = await firstValueFrom(repo.create({ name: 'B', description: 'd', image: '' }));
 
-      expect(result.id).toBe(733);
+      expect(result.id).toBe(51);
     });
 
     it('should set nextId based on high hero ids', async () => {
@@ -176,13 +175,60 @@ describe('HeroLocalRepository', () => {
       expect(result.id).toBe(801);
     });
 
-    it('should default to 733 when no heroes', async () => {
+    it('should default to 1000 when no heroes', async () => {
       const repo = new HeroLocalRepository();
       repo.initialize([]);
 
       const result = await firstValueFrom(repo.create({ name: 'First', description: 'd', image: '' }));
 
-      expect(result.id).toBe(733);
+      expect(result.id).toBe(1000);
+    });
+
+    it('should preserve locally created heroes when re-initialized with seed data', async () => {
+      const repo = new HeroLocalRepository();
+
+      // 1. Seed arrives
+      repo.initialize([...MOCK_HEROES]);
+
+      // 2. User creates a hero locally
+      const localHero = await firstValueFrom(
+        repo.create({ name: 'Local Hero', description: 'created before late seed', image: '' })
+      );
+      expect(localHero.name).toBe('Local Hero');
+
+      // 3. Late seed arrives (re-initialize)
+      repo.initialize([...MOCK_HEROES]);
+
+      // 4. Local hero MUST survive
+      const allHeroes = await firstValueFrom(repo.getAll());
+      expect(allHeroes.some((h) => h.name === 'Local Hero')).toBeTrue();
+
+      // 5. Seed heroes MUST also be present
+      expect(allHeroes.some((h) => h.name === 'Batman')).toBeTrue();
+    });
+
+    it('should not duplicate heroes when same seed arrives twice', async () => {
+      const repo = new HeroLocalRepository();
+
+      repo.initialize([...MOCK_HEROES]);
+      repo.initialize([...MOCK_HEROES]); // duplicate seed
+
+      const heroes = await firstValueFrom(repo.getAll());
+      const batmen = heroes.filter((h) => h.name === 'Batman');
+      expect(batmen.length).toBe(1);
+    });
+
+    it('should allow CRUD after merge initialization', async () => {
+      const repo = new HeroLocalRepository();
+      repo.initialize([...MOCK_HEROES]);
+
+      // Create, then find via search
+      await firstValueFrom(
+        repo.create({ name: 'Post-Merge Hero', description: 'created after seed', image: '' })
+      );
+
+      const results = await firstValueFrom(repo.searchByName('Post-Merge'));
+      expect(results.some((h) => h.name === 'Post-Merge Hero')).toBeTrue();
     });
   });
 });

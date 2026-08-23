@@ -27,14 +27,13 @@ describe('HeroService', () => {
   });
 
   describe('getAll', () => {
-    it('should return heroes from repository', () => {
+    it('should return heroes from repository', async () => {
       repository.getAll.and.returnValue(of(MOCK_HEROES));
 
-      service.getAll().subscribe((heroes) => {
-        expect(heroes.length).toBe(MOCK_HEROES.length);
-        expect(heroes).toEqual(MOCK_HEROES);
-      });
+      const heroes = await firstValueFrom(service.getAll());
 
+      expect(heroes.length).toBe(MOCK_HEROES.length);
+      expect(heroes).toEqual(MOCK_HEROES);
       expect(repository.getAll).toHaveBeenCalled();
     });
 
@@ -53,23 +52,29 @@ describe('HeroService', () => {
   });
 
   describe('getById', () => {
-    it('should return a hero by id', () => {
+    it('should return a hero by id', async () => {
       repository.getById.and.returnValue(of(MOCK_SINGLE_HERO));
 
-      service.getById('70').subscribe((hero) => {
-        expect(hero).toEqual(MOCK_SINGLE_HERO);
-        expect(hero?.name).toBe('Batman');
-      });
+      const hero = await firstValueFrom(service.getById('70'));
 
+      expect(hero).toEqual(MOCK_SINGLE_HERO);
+      expect(hero?.name).toBe('Batman');
       expect(repository.getById).toHaveBeenCalledWith(70);
     });
 
-    it('should return null when hero not found', () => {
+    it('should return null when hero not found', async () => {
       repository.getById.and.returnValue(of(null));
 
-      service.getById('99999').subscribe((hero) => {
-        expect(hero).toBeNull();
-      });
+      const hero = await firstValueFrom(service.getById('99999'));
+
+      expect(hero).toBeNull();
+    });
+
+    it('should return null for non-numeric id', async () => {
+      const hero = await firstValueFrom(service.getById('abc'));
+
+      expect(hero).toBeNull();
+      expect(repository.getById).not.toHaveBeenCalled();
     });
 
     it('should throw typed NOT_FOUND error on failure', async () => {
@@ -87,44 +92,40 @@ describe('HeroService', () => {
   });
 
   describe('searchByName', () => {
-    it('should search heroes by name', () => {
+    it('should search heroes by name', async () => {
       const batmanHeroes = MOCK_HEROES.filter((h) => h.name.toLowerCase().includes('batman'));
       repository.searchByName.and.returnValue(of(batmanHeroes));
 
-      service.searchByName('batman').subscribe((heroes) => {
-        expect(heroes.length).toBeGreaterThan(0);
-        heroes.forEach((h) => {
-          expect(h.name.toLowerCase()).toContain('batman');
-        });
-      });
+      const heroes = await firstValueFrom(service.searchByName('batman'));
 
+      expect(heroes.length).toBeGreaterThan(0);
+      heroes.forEach((h) => expect(h.name.toLowerCase()).toContain('batman'));
       expect(repository.searchByName).toHaveBeenCalledWith('batman');
     });
 
-    it('should return all heroes when search term is empty', () => {
+    it('should return all heroes when search term is empty', async () => {
       repository.getAll.and.returnValue(of(MOCK_HEROES));
 
-      service.searchByName('').subscribe((heroes) => {
-        expect(heroes.length).toBe(MOCK_HEROES.length);
-      });
+      const heroes = await firstValueFrom(service.searchByName(''));
 
+      expect(heroes.length).toBe(MOCK_HEROES.length);
       expect(repository.getAll).toHaveBeenCalled();
     });
 
-    it('should return all heroes when search term is whitespace only', () => {
+    it('should return all heroes when search term is whitespace only', async () => {
       repository.getAll.and.returnValue(of(MOCK_HEROES));
 
-      service.searchByName('   ').subscribe((heroes) => {
-        expect(heroes.length).toBe(MOCK_HEROES.length);
-      });
+      const heroes = await firstValueFrom(service.searchByName('   '));
+
+      expect(heroes.length).toBe(MOCK_HEROES.length);
     });
 
-    it('should return empty array when no results', () => {
+    it('should return empty array when no results', async () => {
       repository.searchByName.and.returnValue(of([]));
 
-      service.searchByName('zzzznotfound').subscribe((heroes) => {
-        expect(heroes).toEqual([]);
-      });
+      const heroes = await firstValueFrom(service.searchByName('zzzznotfound'));
+
+      expect(heroes).toEqual([]);
     });
 
     it('should throw typed error on search failure', async () => {
@@ -142,7 +143,7 @@ describe('HeroService', () => {
   });
 
   describe('create', () => {
-    it('should create a new hero', () => {
+    it('should create a new hero', async () => {
       const newHero = {
         name: 'New Hero',
         description: 'A new hero',
@@ -154,11 +155,10 @@ describe('HeroService', () => {
       const createdHero = { ...newHero, id: 1000 };
       repository.create.and.returnValue(of(createdHero));
 
-      service.create(newHero).subscribe((hero) => {
-        expect(hero.id).toBe(1000);
-        expect(hero.name).toBe('New Hero');
-      });
+      const hero = await firstValueFrom(service.create(newHero));
 
+      expect(hero.id).toBe(1000);
+      expect(hero.name).toBe('New Hero');
       expect(repository.create).toHaveBeenCalledWith(newHero);
     });
 
@@ -213,14 +213,13 @@ describe('HeroService', () => {
   });
 
   describe('update', () => {
-    it('should update an existing hero', () => {
+    it('should update an existing hero', async () => {
       const updatedHero = { ...MOCK_SINGLE_HERO, name: 'Batman Updated' };
       repository.update.and.returnValue(of(updatedHero));
 
-      service.update(updatedHero).subscribe((hero) => {
-        expect(hero.name).toBe('Batman Updated');
-      });
+      const hero = await firstValueFrom(service.update(updatedHero));
 
+      expect(hero.name).toBe('Batman Updated');
       expect(repository.update).toHaveBeenCalledWith(updatedHero);
     });
 
@@ -239,13 +238,12 @@ describe('HeroService', () => {
   });
 
   describe('delete', () => {
-    it('should delete a hero by id', () => {
+    it('should delete a hero by id', async () => {
       repository.delete.and.returnValue(of(true));
 
-      service.delete(70).subscribe((result) => {
-        expect(result).toBeTrue();
-      });
+      const result = await firstValueFrom(service.delete(70));
 
+      expect(result).toBeTrue();
       expect(repository.delete).toHaveBeenCalledWith(70);
     });
 

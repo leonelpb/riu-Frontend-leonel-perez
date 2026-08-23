@@ -10,7 +10,7 @@ https://riu-hotels-crud-challenge.netlify.app/heroes
 - **Language:** TypeScript 6.0 (strict typing)
 - **State Management:** Signals + RxJS (reactive programming)
 - **Styling:** SCSS with custom Design Tokens
-- **Testing:** Jasmine + Karma (366 tests, 92%+ coverage)
+- **Testing:** Jasmine + Karma (376 tests, 92%+ coverage)
 - **Build:** Angular CLI + esbuild
 - **Containerization:** Docker (multi-stage) + Nginx
 - **CI/CD:** GitHub Actions
@@ -45,7 +45,7 @@ https://riu-hotels-crud-challenge.netlify.app/heroes
 npm install
 
 # Start dev server
-ng serve
+npm start
 
 # Open http://localhost:4200
 ```
@@ -153,7 +153,7 @@ Custom SCSS-based design system with:
 ## Testing
 
 ```bash
-# Total tests: 366
+# Total tests: 376
 # Coverage: Statements 92% | Branches 78% | Functions 97% | Lines 94%
 ```
 
