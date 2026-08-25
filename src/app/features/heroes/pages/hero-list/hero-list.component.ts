@@ -260,6 +260,9 @@ export class HeroListComponent implements OnInit, OnDestroy {
         this.heroToDelete.set(null);
         this.heroes.update((current) => current.filter((h) => h.id !== hero.id));
 
+        // Clamp currentPage if delete leaves the page out of range.
+        this.clampCurrentPage();
+
         // Clear panel if deleted hero was selected.
         if (this.selectedHero()?.id === hero.id) {
           this.selectedHero.set(null);
@@ -282,6 +285,14 @@ export class HeroListComponent implements OnInit, OnDestroy {
       this.searchTerm.set(term);
       this.currentPage.set(1);
     });
+  }
+
+  private clampCurrentPage(): void {
+    const total = this.filteredHeroes().length;
+    const totalPages = Math.max(1, Math.ceil(total / this.pageSize));
+    if (this.currentPage() > totalPages) {
+      this.currentPage.set(totalPages);
+    }
   }
 
   private setupDesktopDetection(): void {

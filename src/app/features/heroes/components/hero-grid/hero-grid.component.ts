@@ -5,7 +5,6 @@ import {
   EventEmitter,
   ChangeDetectionStrategy,
   signal,
-  computed,
   HostListener,
   HostBinding,
   OnChanges,
@@ -75,7 +74,7 @@ import { HeroCardComponent } from '../hero-card/hero-card.component';
     </section>
   `,
 })
-export class HeroGridComponent {
+export class HeroGridComponent implements OnChanges {
   @Input() heroes: Hero[] = [];
   @Input() showActions = true;
   @Input() panelMode = false;

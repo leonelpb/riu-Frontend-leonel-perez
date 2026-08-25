@@ -1,10 +1,12 @@
+import { TestBed } from '@angular/core/testing';
 import { LoadingService } from './loading.service';
 
 describe('LoadingService', () => {
   let service: LoadingService;
 
   beforeEach(() => {
-    service = new LoadingService();
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(LoadingService);
   });
 
   it('should be created', () => {
@@ -15,24 +17,41 @@ describe('LoadingService', () => {
     expect(service.loading()).toBeFalse();
   });
 
-  it('should set loading to true on show', () => {
-    service.show();
+  it('should set loading to true on first increment', () => {
+    service.increment();
     expect(service.loading()).toBeTrue();
   });
 
-  it('should set loading to false on hide', () => {
-    service.show();
-    service.hide();
+  it('should set loading to false when all requests complete', () => {
+    service.increment();
+    service.increment();
+    service.decrement();
+    expect(service.loading()).toBeTrue();
+    service.decrement();
     expect(service.loading()).toBeFalse();
   });
 
-  it('should toggle loading state', () => {
-    service.show();
+  it('should track concurrent requests correctly', () => {
+    service.increment();
+    service.increment();
+    service.increment();
     expect(service.loading()).toBeTrue();
-    service.hide();
+
+    service.decrement();
+    expect(service.loading()).toBeTrue();
+
+    service.decrement();
+    expect(service.loading()).toBeTrue();
+
+    service.decrement();
     expect(service.loading()).toBeFalse();
-    service.show();
-    expect(service.loading()).toBeTrue();
+  });
+
+  it('should not go below zero on extra decrements', () => {
+    service.increment();
+    service.decrement();
+    service.decrement();
+    expect(service.loading()).toBeFalse();
   });
 
   it('should return readonly signal', () => {

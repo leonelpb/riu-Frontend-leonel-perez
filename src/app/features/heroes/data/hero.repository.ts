@@ -3,7 +3,6 @@ import { Observable, shareReplay, switchMap, of, tap, catchError, map } from 'rx
 import { Hero } from '../models/hero.model';
 import { HeroApiRepository } from './hero-api.repository';
 import { HeroLocalRepository } from './hero-local.repository';
-import { createAppError } from '../../../models/app-error.model';
 
 @Injectable({ providedIn: 'root' })
 export class HeroRepository {
@@ -46,7 +45,7 @@ export class HeroRepository {
   }
 
   /**
-   * Fetch heroes from the API and seed the local repository.).
+   * Fetch heroes from the API and seed the local repository.
    */
   private fetchAndSeed(): Observable<void> {
     return this.api.getAll().pipe(

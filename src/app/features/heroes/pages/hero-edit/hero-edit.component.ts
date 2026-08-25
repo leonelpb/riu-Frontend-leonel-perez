@@ -1,7 +1,8 @@
-import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HeroService } from '../../services/hero.service';
 import { HeroFormComponent } from '../../hero-form/hero-form.component';
 import { ToastService } from '../../../../core/services/toast.service';
@@ -128,6 +129,7 @@ export class HeroEditComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly toast = inject(ToastService);
+  private readonly destroyRef = inject(DestroyRef);
 
   hero = signal<Hero | null>(null);
   loading = signal(true);
@@ -136,6 +138,7 @@ export class HeroEditComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap
       .pipe(
+        takeUntilDestroyed(this.destroyRef),
         switchMap((params) => {
           const id = params.get('id') ?? '';
           this.loading.set(true);

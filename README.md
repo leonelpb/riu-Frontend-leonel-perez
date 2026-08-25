@@ -53,6 +53,9 @@ npm start
 ### Run Tests
 
 ```bash
+# Generate environment files (required before first test/build)
+npm run set-env
+
 # Run all tests
 ng test --no-watch --browsers=ChromeHeadless
 
@@ -69,14 +72,17 @@ npm run lint
 ## Docker
 
 ```bash
-# Build and run
-docker compose up --build
+# Build and run (production, port 8080)
+docker compose -f docker-compose.yml up --build
 
 # Open http://localhost:8080
 
 # Stop
-docker compose down
+docker compose -f docker-compose.yml down
 ```
+
+> **Note:** `compose.yaml` defines dev/staging/prod multi-environment services (ports 4200/4201/4202).
+> The command above uses `docker-compose.yml` which builds a single production container on port 8080.
 
 ## Architecture
 

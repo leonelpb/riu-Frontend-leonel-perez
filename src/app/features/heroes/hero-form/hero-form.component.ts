@@ -7,6 +7,7 @@ import {
   OnChanges,
   SimpleChanges,
   ChangeDetectionStrategy,
+  inject,
 } from '@angular/core';
 
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -148,7 +149,7 @@ export class HeroFormComponent implements OnInit, OnChanges {
 
   form!: FormGroup;
 
-  private readonly fb = new FormBuilder();
+  private readonly fb = inject(FormBuilder);
 
   private readonly imageUrlPattern = /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i;
 

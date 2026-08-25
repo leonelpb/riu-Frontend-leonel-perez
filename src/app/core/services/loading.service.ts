@@ -2,14 +2,18 @@ import { Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class LoadingService {
-  private readonly _loading = signal(false);
-  readonly loading = this._loading.asReadonly();
+  private readonly pendingCount = signal(0);
+  readonly loading = signal(false);
 
-  show(): void {
-    this._loading.set(true);
+  increment(): void {
+    this.pendingCount.update((c) => c + 1);
+    this.loading.set(true);
   }
 
-  hide(): void {
-    this._loading.set(false);
+  decrement(): void {
+    this.pendingCount.update((c) => Math.max(0, c - 1));
+    if (this.pendingCount() === 0) {
+      this.loading.set(false);
+    }
   }
 }
